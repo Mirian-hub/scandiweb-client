@@ -7,16 +7,18 @@ import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 import { ReactComponent as Cart } from "../assets/icons/cart.svg";
 const options = ["WOMEN", "MEN", "KIDS"];
 const NavBar = styled.div`
+  display: flex;
   margin: 0;
   padding: 0;
   overflow: hidden;
   color: blue;
   align-items: center;
   justify-content: space-between;
-  width: 95%;
+  width: 90%;
   margin: auto;
   ul {
     list-style-type: none;
+    padding-left: 0px;
   }
   li {
     float: left;
@@ -48,10 +50,8 @@ export class AppBar extends Component {
   }
   static propTypes = {};
   render() {
-    console.log(this.state.activeId);
-
     return (
-      <NavBar style={{ display: "flex" }}>
+      <NavBar>
         <ul>
           {options.map((item, i) => (
             <li
@@ -82,11 +82,11 @@ export class AppBar extends Component {
           <span>
             <a href="#home">
               <Currancy />
-              <ArrowDown />
+              <ArrowDown style={{ paddingLeft: "5px" }} />
             </a>
           </span>
 
-          <a href="#home">
+          <a href="#home" style={{ padding: "0px 10px", marginLeft: "15px" }}>
             <Cart />
           </a>
         </div>
