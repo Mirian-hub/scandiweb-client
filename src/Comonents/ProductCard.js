@@ -7,7 +7,7 @@ const Card = styled.div`
   width: 30%;
   margin-right: 40px;
   margin-bottom: 40px;
-  max-height:350px ;
+  /* max-height:350px; */
   &:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   }
@@ -16,16 +16,19 @@ const Card = styled.div`
   }
 
   img {
-    width: 100%;
+    width: 95%;
+    display: block;
+    margin: auto;
+    margin-top: 10px;
   }
 `;
-export default class ProductCard extends Component {
-  //   static propTypes = { second: 'third' };
+ class ProductCard extends Component {
   render() {
-    const { img, name, price } = this.props.data;
+    // this.props.getProductsAsync();
+    const { gallery, name, price } = this.props.data;
     return (
-      <Card >
-        <img src={`https://i.natgeofe.com/n/46b07b5e-1264-42e1-ae4b-8a021226e2d0/domestic-cat_thumb.jpg`} alt="Avatar" />
+      <Card>
+        <img src={gallery[0]} alt="Avatar" />
         <div className="container">
           <h4>
             <b>{name}</b>
@@ -36,3 +39,6 @@ export default class ProductCard extends Component {
     );
   }
 }
+
+export default ProductCard;
+

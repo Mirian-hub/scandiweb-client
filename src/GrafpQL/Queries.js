@@ -4,9 +4,43 @@ export const LOAD_CATEGORIES = gql`
     category {
       name
       products {
-        name
-        description
         id
+        name
+        inStock
+        description
+        gallery
+        category
+        brand
+        prices {
+          currency {
+            label
+            symbol
+          }
+          amount
+        }
+      }
+    }
+  }
+`;
+export const LOAD_PRODUCTS = gql`
+  query {
+    category {
+      name
+      products {
+        id
+        name
+        inStock
+        description
+        gallery
+        category
+        brand
+        prices {
+          currency {
+            label
+            symbol
+          }
+          amount
+        }
       }
     }
   }
