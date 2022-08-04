@@ -57,7 +57,6 @@ export class AppBar extends Component {
             <li
               key={i}
               onClick={() => {
-                debugger;
                 this.setState({
                   activeId: i,
                 });

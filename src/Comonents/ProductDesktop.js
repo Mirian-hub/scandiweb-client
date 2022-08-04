@@ -13,7 +13,7 @@ const CardsContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
   }
-  p {
+  .categoryP {
     font-family: "Raleway";
     font-style: normal;
     font-weight: 400;
@@ -28,10 +28,10 @@ const CardsContainer = styled.div`
   }
 
   render() {
-    console.log('props', this.props)
+    // console.log('props', this.props)
     return (
       <CardsContainer>
-        <p> Category name </p>
+        <p className="categoryP"> Category name </p>
         <div className="content">
           {this.props.products.products.map((item, i) => (
             <ProductCard data={item} key={i} />

@@ -1,10 +1,13 @@
 import logo from "./logo.svg";
 import "./App.css";
-import Categories from "./Comonents/Categories";
+import AppLayout from "./Comonents/AppLayout";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-      <Categories />
+    <BrowserRouter>
+      <AppLayout />
+    </BrowserRouter>
   );
 }
 
