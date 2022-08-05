@@ -1,10 +1,16 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/icons/logo.svg";
 import { ReactComponent as Currancy } from "../assets/icons/currancy.svg";
 import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 import { ReactComponent as Cart } from "../assets/icons/cart.svg";
+import { Link, resolvePath } from "react-router-dom";
+import { useDispatch, useSelector, connect } from "react-redux";
+import {  getProductsAsync } from "../redux/slices/ProductsSlice";
+import { selectState, getCategoriesAsync } from "../redux/slices/CategorySlice";
+import { resolveObjMapThunk } from "graphql";
+
+
 const options = ["WOMEN", "MEN", "KIDS"];
 const NavBar = styled.div`
   display: flex;
@@ -24,7 +30,7 @@ const NavBar = styled.div`
     float: left;
   }
 `;
-const NavA = styled.a`
+const RouterLink = styled(Link)`
   display: block;
   text-align: center;
   padding: 14px 16px;
@@ -47,13 +53,23 @@ export class AppBar extends Component {
   constructor(props) {
     super(props);
     this.state = { activeId: 0 };
+    props.getCategoriesAsync().then(res => {
+      // debugger
+      props.getProductsAsync(res.payload[0].name)
+    })
+
   }
+  onLinkClick = (item) => {
+    debugger
+    this.props.getProductsAsync(item)
+  } 
+  
   static propTypes = {};
   render() {
     return (
       <NavBar>
         <ul>
-          {options.map((item, i) => (
+          {this.props.categories.map((item, i) => (
             <li
               key={i}
               onClick={() => {
@@ -62,13 +78,14 @@ export class AppBar extends Component {
                 });
               }}
             >
-              <NavA
+              <RouterLink
+                to={item}
                 className="active"
-                href="#home"
                 isactive={i === this.state.activeId}
+                onClick={()=>this.onLinkClick(item)}
               >
                 {item}
-              </NavA>
+              </RouterLink> 
             </li>
           ))}
         </ul>
@@ -94,4 +111,14 @@ export class AppBar extends Component {
   }
 }
 
-export default AppBar;
+const mapStateToProps = (state) => ({
+  categories: state.categories.categories,
+});
+const mapDispatchToProps = () => ({
+  getProductsAsync,
+  getCategoriesAsync
+});
+
+export default connect(mapStateToProps, mapDispatchToProps())(AppBar);
+
+

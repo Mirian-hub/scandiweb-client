@@ -1,47 +1,31 @@
 import { gql } from "@apollo/client";
 export const LOAD_CATEGORIES = gql`
   query {
-    category {
+    categories {
       name
-      products {
-        id
-        name
-        inStock
-        description
-        gallery
-        category
-        brand
-        prices {
-          currency {
-            label
-            symbol
-          }
-          amount
-        }
-      }
     }
   }
 `;
-export const LOAD_PRODUCTS = gql`
-  query {
-    category {
+export const getLoadProductsQuery = (title) => gql`
+query {
+  category (input:{title: "${title}"}) {
+    name
+    products {
+      id
       name
-      products {
-        id
-        name
-        inStock
-        description
-        gallery
-        category
-        brand
-        prices {
-          currency {
-            label
-            symbol
-          }
-          amount
+      inStock
+      description
+      gallery
+      category
+      brand
+      prices {
+        currency {
+          label
+          symbol
         }
+        amount
       }
     }
   }
+}
 `;

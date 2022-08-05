@@ -8,8 +8,9 @@ const initialState = {
 
 export const getProductsAsync = createAsyncThunk(
   'getProducts',
-  async () => {
-    const response = await getProducts()
+  async (title) => {
+    const response = await getProducts(title)
+    debugger
     return response.category.products
   }
 )
@@ -26,8 +27,10 @@ export const ProductsSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(getProductsAsync.fulfilled, (state, action) => {
+        debugger
         state.status = 'idle';
         state.products = action.payload;
+          
       })
   },
 })

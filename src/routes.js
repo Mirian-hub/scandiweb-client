@@ -1,11 +1,14 @@
 import React from 'react'
-import {Switch, Route, } from 'react-router-dom'
+import {Switch, Route, Routes as RoutesGroup } from 'react-router-dom'
 import ProductDesktop from './Comonents/ProductDesktop'
 
 const Routes = () => (
-  <Switch>
-    <Route  exact path="/"> <ProductDesktop/> </Route>  
-  </Switch>
+  <RoutesGroup>
+    <Route  path={"/"}  element={<ProductDesktop/>}>  </Route>  
+    <Route  path={"/all"}  element={<ProductDesktop/>}>  </Route>  
+    <Route  path={"/clothes"}  element={<ProductDesktop/>}>  </Route>  
+    <Route  path={"/tech"}  element={<ProductDesktop/>}>  </Route>  
+  </RoutesGroup>
 )
 
 export default Routes

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import ProductCard from "./ProductCard";
 
-import { useDispatch, useSelector, connect } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import { selectState, getProductsAsync } from "../redux/slices/ProductsSlice";
 
 const CardsContainer = styled.div`
@@ -24,11 +24,10 @@ const CardsContainer = styled.div`
  export class ProductDesktop extends Component {
   constructor(props) {
     super(props);
-    props.getProductsAsync();
   }
 
   render() {
-    // console.log('props', this.props)
+    console.log('props desktop', this.props)
     return (
       <CardsContainer>
         <p className="categoryP"> Category name </p>

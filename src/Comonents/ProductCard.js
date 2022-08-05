@@ -28,11 +28,11 @@ const OutOFStockP = styled.p`
 
 const Card = styled.div`
   transition: 0.3s;
-  width: 30%;
+  width: 29%;
   margin-right: 40px;
   margin-bottom: 40px;
   padding: 10px;
-  opacity: ${(props) => (!props.inStock ? "0.5" : "1")};
+  opacity: ${(props) => (!props.inStock ? "0.3" : "1")};
 
   &:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
@@ -69,11 +69,15 @@ const Card = styled.div`
   }
 `;
 
+const CartIcon = styled(CartGreen)`
+  &:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  }
+` 
+
 class ProductCard extends Component {
   render() {
-    // this.props.getProductsAsync();
     const { gallery, name, prices, inStock } = this.props.data;
-    console.log("dt", this.props.data);
     return (
       <Card inStock={inStock}>
         <div className="container">
@@ -81,7 +85,7 @@ class ProductCard extends Component {
             <img src={gallery[0]} alt="Avatar" />
             <OutOFStockP inStock={inStock}> OUT OF STOCK </OutOFStockP>
             <CartButton>
-              <CartGreen />
+              <CartIcon />
             </CartButton>
           </div>
 

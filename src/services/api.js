@@ -1,8 +1,8 @@
 import apoloClient from "../GrafpQL";
-import { useQuery } from "@apollo/client";
 
 class Api {
   async call(query) {
+    console.log('api query', query)
     try {
       const response = await apoloClient.query({
         query: query,
