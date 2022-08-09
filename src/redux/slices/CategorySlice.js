@@ -3,7 +3,7 @@ import { getCategories } from "../../services/categories";
 
 const initialState = {
   status: "idle",
-  categories: [1,2,3],
+  categories: [],
 };
 
 export const getCategoriesAsync = createAsyncThunk(

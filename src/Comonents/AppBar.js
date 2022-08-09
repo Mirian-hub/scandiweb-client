@@ -6,12 +6,17 @@ import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 import { ReactComponent as Cart } from "../assets/icons/cart.svg";
 import { Link, resolvePath } from "react-router-dom";
 import { useDispatch, useSelector, connect } from "react-redux";
-import {  getProductsAsync } from "../redux/slices/ProductsSlice";
+import { getProductsAsync } from "../redux/slices/ProductsSlice";
 import { selectState, getCategoriesAsync } from "../redux/slices/CategorySlice";
 import { resolveObjMapThunk } from "graphql";
-
+import CustomSelect from "./Select/CustomSelect";
 
 const options = ["WOMEN", "MEN", "KIDS"];
+const selectOptions = [
+  { id: 1, name: "dollar" },
+  { id: 2, name: "EUR" },
+  { id: 3, name: "GE" },
+];
 const NavBar = styled.div`
   display: flex;
   margin: 0;
@@ -26,10 +31,10 @@ const NavBar = styled.div`
     list-style-type: none;
     padding-left: 0px;
   }
-  li {
-    float: left;
-  }
 `;
+const NavBarLi = styled.li `
+  float: left;
+`
 const RouterLink = styled(Link)`
   display: block;
   text-align: center;
@@ -53,24 +58,29 @@ export class AppBar extends Component {
   constructor(props) {
     super(props);
     this.state = { activeId: 0 };
-    props.getCategoriesAsync().then(res => {
+    props.getCategoriesAsync().then((res) => {
       // debugger
-      props.getProductsAsync(res.payload[0].name)
-    })
-
+      props.getProductsAsync(res.payload[0].name);
+    });
   }
   onLinkClick = (item) => {
-    debugger
-    this.props.getProductsAsync(item)
-  } 
-  
+    this.props.getProductsAsync(item);
+  };
+
   static propTypes = {};
+
+  onHomeLogoCLick = () => {
+    this.props.getProductsAsync(this.props.categories[0]);
+    this.setState({
+      activeId: 0,
+    });
+  };
   render() {
     return (
       <NavBar>
         <ul>
-          {this.props.categories.map((item, i) => (
-            <li
+          {this.props.categories?.map((item, i) => (
+            <NavBarLi
               key={i}
               onClick={() => {
                 this.setState({
@@ -82,26 +92,24 @@ export class AppBar extends Component {
                 to={item}
                 className="active"
                 isactive={i === this.state.activeId}
-                onClick={()=>this.onLinkClick(item)}
+                onClick={() => this.onLinkClick(item)}
               >
-                {item}
-              </RouterLink> 
-            </li>
+                {item?.toUpperCase()}
+              </RouterLink>
+            </NavBarLi>
           ))}
         </ul>
         <div>
-          <a href="#home">
+          <Link to="/" onClick={this.onHomeLogoCLick}>
             <Logo />
-          </a>
+          </Link>
         </div>
-        <div>
-          <span>
-            <a href="#home">
-              <Currancy />
-              <ArrowDown style={{ paddingLeft: "5px" }} />
-            </a>
-          </span>
-
+        <div style={{display: 'flex', alignItems: 'center'}}>
+            <CustomSelect
+              optionsList={selectOptions}
+              defaultText={"some text"}
+            />
+            
           <a href="#home" style={{ padding: "0px 10px", marginLeft: "15px" }}>
             <Cart />
           </a>
@@ -116,9 +124,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = () => ({
   getProductsAsync,
-  getCategoriesAsync
+  getCategoriesAsync,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps())(AppBar);
-
-

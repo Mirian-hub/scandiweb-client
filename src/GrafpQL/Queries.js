@@ -29,3 +29,12 @@ query {
   }
 }
 `;
+
+export const LOAD_CURRENCIES = gql`
+  query {
+    currencies {
+      label
+      symbol
+    }
+  }
+`;
