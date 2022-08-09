@@ -4,6 +4,7 @@ import { getCurrencies } from "../../services/currencies";
 const initialState = {
   status: "idle",
   currencies: [],
+  currentCurrency: null
 };
 
 export const getCurrenciesAsync = createAsyncThunk(
@@ -17,7 +18,11 @@ export const getCurrenciesAsync = createAsyncThunk(
 export const CurrenciesSlice = createSlice({
   name: "currencies",
   initialState,
-  reducers: {},
+  reducers: {
+    changeCurrency (state, action) {
+      state.currentCurrency = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getCurrenciesAsync.pending, (state) => {
@@ -26,10 +31,11 @@ export const CurrenciesSlice = createSlice({
       .addCase(getCurrenciesAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.currencies = action.payload;
+        state.currentCurrency = action.payload[0]
       });
   },
 });
 
 export const selectState = (state) => state.currencies;
-
+export const {changeCurrency} = CurrenciesSlice.actions
 export default CurrenciesSlice.reducer;

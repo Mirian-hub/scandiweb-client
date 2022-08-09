@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { useDispatch, useSelector, connect } from "react-redux";
 import styled from "styled-components";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
-
+import {changeCurrency} from "../../redux/slices/CurrenciesSlice"
 import {
   selectState,
   getCurrenciesAsync,
@@ -74,6 +74,7 @@ class CustomSelect extends Component {
     });
 
   onOptionClicked = (value) => () => {
+    this.props.changeCurrency(value)
     this.setState({
       selectedOption: value,
       isOpen: false,
@@ -113,6 +114,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = () => ({
   getCurrenciesAsync,
+  changeCurrency
 });
 
 export default connect(mapStateToProps, mapDispatchToProps())(CustomSelect);

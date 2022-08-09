@@ -27,13 +27,13 @@ const CardsContainer = styled.div`
   }
 
   render() {
-    console.log('props desktop', this.props)
+    console.log('this.props.currentCurrency', this.props.currentCurrency)
     return (
       <CardsContainer>
         <p className="categoryP"> Category name </p>
         <div className="content">
           {this.props.products.products.map((item, i) => (
-            <ProductCard data={item} key={i} />
+            <ProductCard data={item} key={i} currency={this.props.currentCurrency}/>
           ))}
         </div>
       </CardsContainer>
@@ -43,6 +43,7 @@ const CardsContainer = styled.div`
 
 const mapStateToProps = (state) => ({
   products: state.products,
+  currentCurrency: state.currencies.currentCurrency
 });
 const mapDispatchToProps = () => ({
   getProductsAsync,

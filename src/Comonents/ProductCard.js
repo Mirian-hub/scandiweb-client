@@ -34,9 +34,6 @@ const Card = styled.div`
   padding: 10px;
   opacity: ${(props) => (!props.inStock ? "0.3" : "1")};
 
-  &:hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  }
   &:hover ${CartButton} {
     display: ${(props) => (!props.inStock ? "none" : "block")};
   }
@@ -70,32 +67,32 @@ const Card = styled.div`
 `;
 
 const CartIcon = styled(CartGreen)`
-  &:hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  }
-` 
+`;
 
 class ProductCard extends Component {
   render() {
     const { gallery, name, prices, inStock } = this.props.data;
+    const price = prices.find((x) => x.currency.label === this.props.currency.label);
+    console.log('price', price)
     return (
-      <Card inStock={inStock}>
-        <div className="container">
-          <div className="imgContainer">
-            <img src={gallery[0]} alt="Avatar" />
-            <OutOFStockP inStock={inStock}> OUT OF STOCK </OutOFStockP>
-            <CartButton>
-              <CartIcon />
-            </CartButton>
-          </div>
+      this.props.currency && (
+        <Card inStock={inStock}>
+          <div className="container">
+            <div className="imgContainer">
+              <img src={gallery[0]} alt="Avatar" />
+              <OutOFStockP inStock={inStock}> OUT OF STOCK </OutOFStockP>
+              <CartButton>
+                <CartIcon />
+              </CartButton>
+            </div>
 
-          <p className="nameP"> {name}</p>
-          <div className="priceDiv">
-            <label>{prices[0].currency.symbol}</label>{" "}
-            <label>{prices[0].amount}</label>
+            <p className="nameP"> {name}</p>
+            <div className="priceDiv">
+              <label>{price.currency.label}</label> <label>{price.amount}</label>
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      )
     );
   }
 }

@@ -32,9 +32,9 @@ const NavBar = styled.div`
     padding-left: 0px;
   }
 `;
-const NavBarLi = styled.li `
+const NavBarLi = styled.li`
   float: left;
-`
+`;
 const RouterLink = styled(Link)`
   display: block;
   text-align: center;
@@ -52,6 +52,25 @@ const RouterLink = styled(Link)`
     border-bottom: 2px solid #5ECE7B;
     color: #5ECE7B
   `}
+`;
+const CartContainer = styled.a`
+  padding: "0px 10px";
+  margin-left: "15px";
+  margin-right:15px;
+  position: relative;
+`;
+
+const CartCircle = styled.div`
+  width: 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  text-align: center;
+  color: white;
+  background-color: black;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+
 `;
 
 export class AppBar extends Component {
@@ -76,6 +95,7 @@ export class AppBar extends Component {
     });
   };
   render() {
+    console.log("app bar props", this.props);
     return (
       <NavBar>
         <ul>
@@ -104,15 +124,12 @@ export class AppBar extends Component {
             <Logo />
           </Link>
         </div>
-        <div style={{display: 'flex', alignItems: 'center'}}>
-            <CustomSelect
-              optionsList={selectOptions}
-              defaultText={"some text"}
-            />
-            
-          <a href="#home" style={{ padding: "0px 10px", marginLeft: "15px" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <CustomSelect />
+          <CartContainer href="#home">
             <Cart />
-          </a>
+            <CartCircle> 3 </CartCircle>
+          </CartContainer>
         </div>
       </NavBar>
     );
