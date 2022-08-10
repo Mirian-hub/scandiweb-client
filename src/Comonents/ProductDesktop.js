@@ -4,9 +4,17 @@ import styled from "styled-components";
 import ProductCard from "./ProductCard";
 
 import { useSelector, connect } from "react-redux";
-import { selectState, getProductsAsync } from "../redux/slices/ProductsSlice";
+import {
+  selectState,
+  getProductsAsync,
+  toggleCartOverlay,
+} from "../redux/slices/ProductsSlice";
+import CustomModal from "./CustomModal";
 
 const CardsContainer = styled.div`
+  position: relative;
+`;
+const CardsContent = styled.div`
   width: 90%;
   margin: auto;
   .content {
@@ -21,21 +29,45 @@ const CardsContainer = styled.div`
     line-height: 160%;
   }
 `;
- export class ProductDesktop extends Component {
+export class ProductDesktop extends Component {
   constructor(props) {
     super(props);
+    this.state = { active: false };
   }
 
   render() {
-    console.log('this.props.currentCurrency', this.props.currentCurrency)
     return (
       <CardsContainer>
-        <p className="categoryP"> Category name </p>
-        <div className="content">
-          {this.props.products.products.map((item, i) => (
-            <ProductCard data={item} key={i} currency={this.props.currentCurrency}/>
-          ))}
-        </div>
+        <CardsContent>
+          <p
+            className="categoryP"
+            onClick={() =>
+              this.setState({
+                active: true,
+              })
+            }
+          >
+            {" "}
+            Category name{" "}
+          </p>
+          <div className="content">
+            {this.props.products.products.map((item, i) => (
+              <ProductCard
+                data={item}
+                key={i}
+                currency={this.props.currentCurrency}
+              />
+            ))}
+          </div>
+        </CardsContent>
+        <CustomModal
+          active={this.props.products.cartOverlayOpen}
+          hideModal={() => this.props.toggleCartOverlay(false)}
+          title="Modal title goes here"
+          // footer={<Button>Footer Button</Button>}
+        >
+          Modal body content goes here..
+        </CustomModal>
       </CardsContainer>
     );
   }
@@ -43,11 +75,11 @@ const CardsContainer = styled.div`
 
 const mapStateToProps = (state) => ({
   products: state.products,
-  currentCurrency: state.currencies.currentCurrency
+  currentCurrency: state.currencies.currentCurrency,
 });
 const mapDispatchToProps = () => ({
   getProductsAsync,
+  toggleCartOverlay,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps())(ProductDesktop);
-
