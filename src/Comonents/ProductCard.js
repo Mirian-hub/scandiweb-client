@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 import { ReactComponent as CartGreen } from "../assets/icons/cartGreen.svg";
-
+import { cartProduct, uncartProduct } from "../redux/slices/ProductsSlice";
 const CartButton = styled.button`
   position: absolute;
   right: 50px;
@@ -71,9 +72,9 @@ const CartIcon = styled(CartGreen)`
 
 class ProductCard extends Component {
   render() {
-    const { gallery, name, prices, inStock } = this.props.data;
+    const { gallery, name, prices, inStock, id } = this.props.data;
     const price = prices.find((x) => x.currency.label === this.props.currency.label);
-    console.log('price', price)
+    
     return (
       this.props.currency && (
         <Card inStock={inStock}>
@@ -81,7 +82,7 @@ class ProductCard extends Component {
             <div className="imgContainer">
               <img src={gallery[0]} alt="Avatar" />
               <OutOFStockP inStock={inStock}> OUT OF STOCK </OutOFStockP>
-              <CartButton>
+              <CartButton onClick={()=> this.props.cartProduct(id)}>
                 <CartIcon />
               </CartButton>
             </div>
@@ -91,10 +92,22 @@ class ProductCard extends Component {
               <label>{price.currency.label}</label> <label>{price.amount}</label>
             </div>
           </div>
+          
         </Card>
       )
     );
   }
 }
 
-export default ProductCard;
+const mapStateToProps = (state) => ({
+  products: state.products,
+});
+const mapDispatchToProps = () => ({
+  cartProduct,
+  uncartProduct
+});
+
+export default connect(mapStateToProps, mapDispatchToProps())(ProductCard);
+
+
+
