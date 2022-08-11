@@ -26,10 +26,10 @@ export const ProductsSlice = createSlice({
     state.cartProducts.push(product)
    },
    uncartProduct(state, action) {
-    state.cartProducts.filter(p=>p.id === action.payload)
+    const index  = state.cartProducts.map(p => p.id).indexOf(action.payload);
+    state.cartProducts.splice(index, 1)
    },
    toggleCartOverlay (state, action) {
-    debugger
     state.cartOverlayOpen  = action.payload
    }
   },

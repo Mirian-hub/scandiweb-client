@@ -10,6 +10,7 @@ import {
   toggleCartOverlay,
 } from "../redux/slices/ProductsSlice";
 import CustomModal from "./CustomModal";
+import CartOverlay from "./CartOverlay";
 
 const CardsContainer = styled.div`
   position: relative;
@@ -64,9 +65,11 @@ export class ProductDesktop extends Component {
           active={this.props.products.cartOverlayOpen}
           hideModal={() => this.props.toggleCartOverlay(false)}
           title="Modal title goes here"
-          // footer={<Button>Footer Button</Button>}
+          width={'450px'}
+          top={0}
+          right={'7rem'}
         >
-          Modal body content goes here..
+          <CartOverlay/>
         </CustomModal>
       </CardsContainer>
     );
