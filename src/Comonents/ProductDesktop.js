@@ -65,7 +65,7 @@ export class ProductDesktop extends Component {
           active={this.props.products.cartOverlayOpen}
           hideModal={() => this.props.toggleCartOverlay(false)}
           title="Modal title goes here"
-          width={'450px'}
+          width={'500px'}
           top={0}
           right={'7rem'}
         >
