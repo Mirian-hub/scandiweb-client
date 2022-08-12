@@ -48,3 +48,37 @@ export const LOAD_CURRENCIES = gql`
     }
   }
 `;
+
+export const getLoadProductQuery = (id) => {
+  console.log("idid", id);
+  return gql`
+  query {
+    product (id: "${id}") {
+      id
+        name
+        inStock
+        description
+        gallery
+        category
+        brand
+        prices {
+          currency {
+            label
+            symbol
+          }
+          amount
+        }
+        attributes {
+          id
+          name 
+          type
+          items {
+            displayValue
+            value
+            id
+          }        
+        }
+    }
+  }
+  `;
+};

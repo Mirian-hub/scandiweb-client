@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { Link, resolvePath } from "react-router-dom";
+
 import { ReactComponent as CartGreen } from "../assets/icons/cartGreen.svg";
 import { cartProduct, uncartProduct } from "../redux/slices/ProductsSlice";
 const CartButton = styled.button`
@@ -69,6 +71,9 @@ const Card = styled.div`
 
 const CartIcon = styled(CartGreen)`
 `;
+const CartImg = styled.img`
+cursor: pointer;
+`;
 
 class ProductCard extends Component {
   render() {
@@ -80,7 +85,10 @@ class ProductCard extends Component {
         <Card inStock={inStock}>
           <div className="container">
             <div className="imgContainer">
-              <img src={gallery[0]} alt="Avatar" />
+              <Link to={`/product/${id}`}>
+              <CartImg src={gallery[0]} />
+
+              </Link>
               <OutOFStockP inStock={inStock}> OUT OF STOCK </OutOFStockP>
               <CartButton onClick={()=> this.props.cartProduct(id)}>
                 <CartIcon />

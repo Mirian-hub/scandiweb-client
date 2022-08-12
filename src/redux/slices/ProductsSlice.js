@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getProduct } from '../../services/product';
 import {getProducts } from '../../services/products'
 
 const initialState = {
   status: 'idle',
   products: [],
   cartProducts: [],
-  cartOverlayOpen: false
+  cartOverlayOpen: false,
+  product: null
 }
 
 export const getProductsAsync = createAsyncThunk(
@@ -13,6 +15,15 @@ export const getProductsAsync = createAsyncThunk(
   async (title) => {
     const response = await getProducts(title)
     return response.category.products
+  }
+)
+
+export const getProductAsync = createAsyncThunk(
+  'getProduct',
+  async (id) => {
+    const response = await getProduct(id)
+    const res  = response.product
+    return response.product
   }
 )
 
@@ -40,8 +51,14 @@ export const ProductsSlice = createSlice({
       })
       .addCase(getProductsAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.products = action.payload;
-          
+        state.products = action.payload;  
+      })
+      .addCase(getProductAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getProductAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.product = action.payload;  
       })
   },
 })
