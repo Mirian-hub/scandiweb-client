@@ -4,6 +4,7 @@ import { getCategories } from "../../services/categories";
 const initialState = {
   status: "idle",
   categories: [],
+  currentCategory: null
 };
 
 export const getCategoriesAsync = createAsyncThunk(
@@ -17,7 +18,11 @@ export const getCategoriesAsync = createAsyncThunk(
 export const CategorySlice = createSlice({
   name: "categories",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentCategory (state, action) {
+      state.currentCategory = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getCategoriesAsync.pending, (state) => {
@@ -33,5 +38,5 @@ export const CategorySlice = createSlice({
 });
 
 export const selectState = (state) => state.categories;
-
+export const {setCurrentCategory} = CategorySlice.actions;
 export default CategorySlice.reducer;

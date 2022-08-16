@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { ReactComponent as MinusSquare } from "../assets/icons/minusSquare.svg";
 import { ReactComponent as PlusSquare } from "../assets/icons/plusSquare.svg";
-import { cartProduct, uncartProduct } from "../redux/slices/ProductsSlice";
+import { cartProductById, uncartProduct } from "../redux/slices/ProductsSlice";
 
 const OverlayContainer = styled.div`
   flex-direction: column;
@@ -58,14 +58,17 @@ const BoxItemsContainer = styled.div`
   flex-wrap: wrap;
 `;
 const BoxItem = styled.div`
-  border: 2px solid #1d1f22;
+  
   display: flex;
   margin-right: 5px;
-  background: ${({ color }) => color ?? ""};
+  background: ${({ color, selected }) => color ? color : selected ?  "black": ''};
   justify-content: center;
   align-items: center;
-  width: ${({ color }) => (color ? "25px" : "37px")};
-  height: ${({ color }) => (color ? "25px" : "35px")};
+  width: ${({ color }) => (color ? "25px" : "45px")};
+  height: ${({ color }) => (color ? "25px" : "auto")};
+  border:${({ color, selected }) => (color ? "none" :  "2px solid #1d1f22")} ;
+  outline: ${({ selected, color }) => (selected && color ? "2px solid #5ECE7B" : "")};
+  color: ${({ color, selected }) => !color&&selected && 'white'};
 `;
 const AttributeContainer = styled.div`
   margin-top: 5px;
@@ -99,28 +102,28 @@ const ButtonGroups = styled.div`
 `;
 
 export class CartOverlay extends Component {
-  countSameProducts = () => {
-    const products = this.props.products.cartProducts;
-    const productIds = products.map((p) => p.id);
-    const uniqueProducts = products.filter((p, i) => {
-      return products.map((product) => product.id).indexOf(p.id) == i;
-    });
-    const productsCountById = uniqueProducts.map((item, i) => ({
-      product: item,
-      count: productIds.filter((id) => id === item.id).length,
-    }));
+  // countSameProducts = () => {
+  //   const products = this.props.products.cartProducts;
+  //   const productIds = products.map((p) => p.id);
+  //   const uniqueProducts = products.filter((p, i) => {
+  //     return products.map((product) => product.id).indexOf(p.id) == i;
+  //   });
+  //   const productsCountById = uniqueProducts.map((item, i) => ({
+  //     product: item,
+  //     count: productIds.filter((id) => id === item.id).length,
+  //   }));
 
-    return productsCountById;
-  };
+  //   return productsCountById;
+  // };
   cartedProductsTotalPrice=()=> {
     const products = this.props.products.cartProducts;
     const currentPriceLabel = this.props.currencies.currentCurrency.label;
-    const priceList = products.map(p=>p.prices.find(price => price.currency.label===currentPriceLabel)?.amount)
+    const priceList = products.map(p=>p.product.prices.find(price => price.currency.label===currentPriceLabel)?.amount)
     return priceList.reduce((a,b)=>a+b,0);
   }
   render() {
-    const productList = this.countSameProducts();
-    const { cartProduct, uncartProduct } = this.props;
+    // const productList = this.countSameProducts();
+    const { cartProductById, uncartProduct, products } = this.props;
     return (
       <OverlayContainer>
         <OverlayTitle>
@@ -130,7 +133,7 @@ export class CartOverlay extends Component {
             {this.props.products.cartProducts.length > 1 ? "imtes" : "item"}
           </OverlaySpan>
         </OverlayTitle>
-        {productList.map(({ product, count }, i) => {
+        {products.cartProducts.map(({ product, count }, i) => {
           const price = product.prices.find(
             (p) =>
               this.props.currencies.currentCurrency.label === p.currency.label
@@ -158,9 +161,10 @@ export class CartOverlay extends Component {
                             color={
                               att.name.toLowerCase() === "color" && item.value
                             }
+                            selected={item.selected}
                           >
                             {att.name.toLowerCase() !== "color" &&
-                              item.displayValue.toUpperCase()}
+                              item.value.toUpperCase()}
                           </BoxItem>
                         ))}
                       </BoxItemsContainer>
@@ -170,7 +174,7 @@ export class CartOverlay extends Component {
               </ItemInfo>
               <ItemControls>
                 <div>
-                  <PlusSquareIcon onClick={() => cartProduct(product.id)} width={'35px'} height={'35px'}/>
+                  <PlusSquareIcon onClick={() => cartProductById(product.id)} width={'35px'} height={'35px'}/>
                 </div>
                 <div>{count} </div>
                 <div>
@@ -202,7 +206,7 @@ const mapStateToProps = (state) => ({
   currencies: state.currencies,
 });
 const mapDispatchToProps = () => ({
-  cartProduct,
+  cartProductById,
   uncartProduct,
 });
 

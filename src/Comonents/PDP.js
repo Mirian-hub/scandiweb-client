@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { withRouter } from "./HOC/withRouter";
 import { getProductAsync } from "../redux/slices/ProductsSlice";
 import { connect } from "react-redux";
-
+import { cartProduct } from "../redux/slices/ProductsSlice";
 const PDPContainer = styled.div`
   width: 90%;
   margin: auto;
@@ -17,6 +17,7 @@ const PDPContainer = styled.div`
       margin-bottom: 1rem;
       display: block;
       cursor: pointer;
+      max-width: 100%;
     }
   }
   .mainImgContainer {
@@ -27,7 +28,6 @@ const PDPContainer = styled.div`
   }
   .mainImg {
     width: 100%;
-    height: auto;
   }
   .description {
     width: 30%;
@@ -53,34 +53,34 @@ const ItemInfo = styled.div`
   .addToCartBtn {
     background: #5ece7b;
     color: #ffffff;
-    border:none ;
-    width:50% ;
-    padding: 1rem 1.6rem ;
-    font-size:19px ;
-    margin: 2rem 0rem ;
+    border: none;
+    width: 50%;
+    padding: 1rem 1.6rem;
+    font-size: 19px;
+    margin: 2rem 0rem;
+    cursor: pointer;
   }
   .description {
-    width:100% ;
-    font-size:17px ;
+    width: 100%;
   }
 `;
 const BoxItems = styled.div`
   display: flex;
   flex-wrap: wrap;
-  
+  cursor: pointer;
 `;
 
 const AttributeItem = styled.div`
-
-    border: 2px solid #1d1f22;
-    display: flex;
-    margin-right: 5px;
-    background: ${({ color }) => color ?? ""};
-    justify-content: center;
-    align-items: center;
-    width: ${({ color }) => (color ? "2rem" : "4rem")};
-    height: ${({ color }) => (color ? "2rem" : "3rem")};
-  `
+  display: flex;
+  margin-right: 5px;
+  background: ${({ color }) => color ?? ""};
+  justify-content: center;
+  align-items: center;
+  width: ${({ color }) => (color ? "2rem" : "4rem")};
+  height: ${({ color }) => (color ? "2rem" : "3rem")};
+  border: ${({ color }) => (color ? "none" : "2px solid #1d1f22")};
+  outline: ${({ selected }) => (selected ? "3px solid #5ECE7B" : "")};
+`;
 
 const AttributeContainer = styled.div`
   margin-top: 5px;
@@ -98,12 +98,59 @@ const AttributeName = styled.div`
 class PDP extends Component {
   constructor(props) {
     super(props);
-    this.state = { selectedImgSrc: null };
+    this.state = {
+      selectedImgSrc: null,
+      productState: this.props.products.product,
+    };
     props.getProductAsync(this.props.router.params.id);
   }
-  render() {
-    const { product } = this.props.products;
 
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.products.product?.id !== prevProps.products.product?.id) {
+      this.setState({
+        productState: this.props.products.product,
+      });
+    }
+  }
+  render() {
+    const product = this.state.productState;
+    const onItemClickHandler = (e, attributeName, value) => {
+      var productCopy = { ...product };
+      // debugger;
+      var attributeIndex = productCopy.attributes
+        .map((a) => a.id)
+        .indexOf(attributeName);
+      var attribute = productCopy.attributes[attributeIndex];
+
+      var itemIndex = attribute.items.map((a) => a.id).indexOf(value);
+      var item = { ...attribute.items[itemIndex], selected: true };
+
+      const itemsCopy = attribute.items.map((it, i) => {
+        if (i == itemIndex) {
+          return { ...it, selected: true };
+        } else {
+          return { ...it, selected: false };
+        }
+      });
+      const prod = productCopy.attributes.map((it, i) => {
+        if (i == attributeIndex) {
+          // debugger;
+          const { items, ...rest } = it;
+          return { ...rest, items: itemsCopy };
+        } else {
+          return { ...it };
+        }
+      });
+      productCopy.attributes = prod;
+
+      this.setState({
+        productState: productCopy,
+      });
+    };
+    const price = product?.prices?.find(
+      (p) => this.props.currencies.currentCurrency.label === p.currency.label
+    );
     return (
       product && (
         <PDPContainer>
@@ -135,12 +182,16 @@ class PDP extends Component {
                 return (
                   <AttributeContainer>
                     <div className="attributeName">
-                      {att.name.toUpperCase()}
+                      {att.name?.toUpperCase()}
                       <span>:</span>
                     </div>
                     <BoxItems>
                       {att.items.map((item, i) => (
                         <AttributeItem
+                          onClick={(e) =>
+                            onItemClickHandler(e, att.name, item.id)
+                          }
+                          selected={item.selected}
                           color={
                             att.name.toLowerCase() === "color" && item.value
                           }
@@ -155,11 +206,23 @@ class PDP extends Component {
               })}
               <PriceContainer>
                 <div className="title">PRICE:</div>
-                <span>{product.prices[0].currency.symbol} </span>
-                <span>{product.prices[0].amount}</span>
+                <span>{price.currency.symbol} </span>
+                <span>{price.amount}</span>
               </PriceContainer>
-            <button className="addToCartBtn"> ADD TO CART</button>
-            <p className="description"> {product.description} </p>
+              <button
+                className="addToCartBtn"
+                onClick={() => {
+                  this.props.cartProduct(this.state.productState);
+                }}
+              >
+                {" "}
+                ADD TO CART
+              </button>
+              <div
+                className="description"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              ></div>
+              {/* <p className="description" dang> {product.description} </p> */}
             </ItemInfo>
           </div>
         </PDPContainer>
@@ -171,9 +234,11 @@ class PDP extends Component {
 const mapStateToProps = (state) => ({
   categories: state.categories.categories,
   products: state.products,
+  currencies: state.currencies,
 });
 const mapDispatchToProps = () => ({
   getProductAsync,
+  cartProduct,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps())(withRouter(PDP));

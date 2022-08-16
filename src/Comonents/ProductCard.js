@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Link, resolvePath } from "react-router-dom";
 
 import { ReactComponent as CartGreen } from "../assets/icons/cartGreen.svg";
-import { cartProduct, uncartProduct } from "../redux/slices/ProductsSlice";
+import { cartProductById, uncartProduct } from "../redux/slices/ProductsSlice";
 const CartButton = styled.button`
   position: absolute;
   right: 50px;
@@ -17,7 +17,7 @@ const CartButton = styled.button`
   transition: 0.5s;
 `;
 
-const OutOFStockP = styled.p`
+const OutOfStockP = styled.p`
   text-align: center;
   font-family: "Raleway";
   font-style: normal;
@@ -89,8 +89,8 @@ class ProductCard extends Component {
               <CartImg src={gallery[0]} />
 
               </Link>
-              <OutOFStockP inStock={inStock}> OUT OF STOCK </OutOFStockP>
-              <CartButton onClick={()=> this.props.cartProduct(id)}>
+              <OutOfStockP inStock={inStock}> OUT OF STOCK </OutOfStockP>
+              <CartButton onClick={()=> this.props.cartProductById(id)}>
                 <CartIcon />
               </CartButton>
             </div>
@@ -111,7 +111,7 @@ const mapStateToProps = (state) => ({
   products: state.products,
 });
 const mapDispatchToProps = () => ({
-  cartProduct,
+  cartProductById,
   uncartProduct
 });
 

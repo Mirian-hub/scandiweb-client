@@ -6,8 +6,11 @@ import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 import { ReactComponent as Cart } from "../assets/icons/cart.svg";
 import { Link, resolvePath } from "react-router-dom";
 import { useDispatch, useSelector, connect } from "react-redux";
-import { getProductsAsync, toggleCartOverlay } from "../redux/slices/ProductsSlice";
-import { selectState, getCategoriesAsync } from "../redux/slices/CategorySlice";
+import {
+  getProductsAsync,
+  toggleCartOverlay,
+} from "../redux/slices/ProductsSlice";
+import { selectState, getCategoriesAsync, setCurrentCategory } from "../redux/slices/CategorySlice";
 import { resolveObjMapThunk } from "graphql";
 import CustomSelect from "./Select/CustomSelect";
 import CustomModal from "./CustomModal";
@@ -58,6 +61,7 @@ const CartContainer = styled.a`
   margin-left: "15px";
   margin-right: 15px;
   position: relative;
+  cursor: pointer;
 `;
 
 const CartCircle = styled.div`
@@ -82,6 +86,7 @@ export class AppBar extends Component {
     });
   }
   onLinkClick = (item) => {
+    this.props.setCurrentCategory(item);
     this.props.getProductsAsync(item);
   };
 
@@ -95,7 +100,6 @@ export class AppBar extends Component {
   };
 
   render() {
-    console.log("app bar props", this.props);
     return (
       this.props.products &&
       this.props.categories && (
@@ -125,19 +129,15 @@ export class AppBar extends Component {
             <Link to="/" onClick={this.onHomeLogoCLick}>
               <Logo />
             </Link>
-            
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             <CustomSelect />
-            <CartContainer
-              href="#home"
-              onClick={() =>
-               this.props.toggleCartOverlay(true)
-              }
-            >
+            <CartContainer onClick={() => this.props.toggleCartOverlay(true)}>
               <Cart />
               <CartCircle>
-                {this.props.products.cartProducts.length}{" "}
+                {this.props.products.cartProducts
+                  .map((p) => p.count)
+                  .reduce((b, a) => b + a, 0)}
               </CartCircle>
             </CartContainer>
           </div>
@@ -154,7 +154,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = () => ({
   getProductsAsync,
   getCategoriesAsync,
-  toggleCartOverlay
+  toggleCartOverlay,
+  setCurrentCategory
 });
 
 export default connect(mapStateToProps, mapDispatchToProps())(AppBar);
