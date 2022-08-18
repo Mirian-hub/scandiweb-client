@@ -2,13 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 import { getProduct } from "../../services/product";
 import { getProducts } from "../../services/products";
-
+var equal = require("deep-equal");
 const initialState = {
   status: "idle",
   products: [],
   cartProducts: [],
   cartOverlayOpen: false,
-  product: null,
 };
 
 export const getProductsAsync = createAsyncThunk(
@@ -39,78 +38,39 @@ export const ProductsSlice = createSlice({
         ? state.cartProducts.find((p) => p.product.id === action.payload)
             .count++
         : state.cartProducts.push({
-            product: product,
+            product: { ...product, customId: product.id },
             count: 1,
           });
     },
+
+    cartProductByCustomId(state, action) {
+      state.cartProducts.find((p) => p.product.customId === action.payload).count++;
+    },
     cartProduct(state, action) {
-      // debugger;
-      const product = action.payload;
-      const productFromState = state.products.find(
-        (p) => p.id === action.payload.id
-      );
-      // only add to cart id same attributes...
-
-      const productWithSameAttributesExists = () => {
-        const getSelectedItemsIndexes = (attributes) => {
-          // debugger;
-          const res = attributes.map((a) =>
-            a.items.map((item, i) => item.selected === true && i)
-          );
-          return res;
-        };
-        const productWithSameId = state.cartProducts.find(
-          (p) => p.product.id === action.payload.id
-        );
-        if (!productWithSameId) return false;
-        else {
-          const selectedIndexesOld = getSelectedItemsIndexes(
-            productWithSameId.product.attributes
-          );
-          const selectedIndexesNew = getSelectedItemsIndexes(
-            product.attributes
-          );
-          var result = [];
-          for (var i = 0; i < selectedIndexesOld.length; ++i) {
-            for (var j = 0; j < selectedIndexesOld[i].length; ++j) {
-              if (
-                selectedIndexesOld[i][j] === selectedIndexesNew[i][j] &&
-                selectedIndexesOld[i][j] !== false &&
-                selectedIndexesNew[i][j] !== false
-              ) {
-                result.push(true);
-              }
-            }
-          }
-          if (selectedIndexesOld.length === result.length) {
-            return true;
-          } else return false;
-        }
-      };
-
-      console.log(
-        "productWithSameAttributesExists()",
-        productWithSameAttributesExists()
+      const productFromAction = action.payload;
+      const productFromCart = state.cartProducts.find(
+        (p) => p.product.customId === action.payload.customId
       );
 
-      productWithSameAttributesExists()
-        ? state.cartProducts.find((p) => p.product.id === action.payload.id)
-            .count++
+      productFromCart
+        ? state.cartProducts.find(
+            (p) => p.product.customId === action.payload.customId
+          ).count++
         : state.cartProducts.push({
             product: action.payload,
             count: 1,
           });
     },
     uncartProduct(state, action) {
-      // debugger
       const product = state.cartProducts.find(
-        (p) => p.product.id === action.payload
+        (p) =>
+          p.product.customId === action.payload 
       );
       if (product.count > 1) {
-        state.cartProducts.find((p) => p.product.id === action.payload).count--;
+        state.cartProducts.find((p) => p.product.customId === action.payload).count--;
       } else {
         const index = state.cartProducts
-          .map((p) => p.product.id)
+          .map((p) => p.product.customId)
           .indexOf(action.payload);
         state.cartProducts.splice(index, 1);
       }
@@ -142,6 +102,7 @@ export const selectState = (state) => state.products;
 export const {
   cartProduct,
   cartProductById,
+  cartProductByCustomId,
   uncartProduct,
   toggleCartOverlay,
 } = ProductsSlice.actions;

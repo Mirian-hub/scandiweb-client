@@ -4,7 +4,10 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { ReactComponent as MinusSquare } from "../assets/icons/minusSquare.svg";
 import { ReactComponent as PlusSquare } from "../assets/icons/plusSquare.svg";
-import { cartProductById, uncartProduct } from "../redux/slices/ProductsSlice";
+import {
+  cartProductByCustomId,
+  uncartProduct,
+} from "../redux/slices/ProductsSlice";
 
 const OverlayContainer = styled.div`
   flex-direction: column;
@@ -58,17 +61,18 @@ const BoxItemsContainer = styled.div`
   flex-wrap: wrap;
 `;
 const BoxItem = styled.div`
-  
   display: flex;
   margin-right: 5px;
-  background: ${({ color, selected }) => color ? color : selected ?  "black": ''};
+  background: ${({ color, selected }) =>
+    color ? color : selected ? "black" : ""};
   justify-content: center;
   align-items: center;
   width: ${({ color }) => (color ? "25px" : "45px")};
   height: ${({ color }) => (color ? "25px" : "auto")};
-  border:${({ color, selected }) => (color ? "none" :  "2px solid #1d1f22")} ;
-  outline: ${({ selected, color }) => (selected && color ? "2px solid #5ECE7B" : "")};
-  color: ${({ color, selected }) => !color&&selected && 'white'};
+  border: ${({ color, selected }) => (color ? "none" : "2px solid #1d1f22")};
+  outline: ${({ selected, color }) =>
+    selected && color ? "2px solid #5ECE7B" : ""};
+  color: ${({ color, selected }) => !color && selected && "white"};
 `;
 const AttributeContainer = styled.div`
   margin-top: 5px;
@@ -91,10 +95,10 @@ const ButtonGroups = styled.div`
     text-transform: uppercase;
     cursor: pointer;
   }
-  .rightButton{
+  .rightButton {
     background: #5ece7b;
     color: #ffffff;
-    border:none ;
+    border: none;
   }
   .leftButton {
     background: none;
@@ -102,28 +106,21 @@ const ButtonGroups = styled.div`
 `;
 
 export class CartOverlay extends Component {
-  // countSameProducts = () => {
-  //   const products = this.props.products.cartProducts;
-  //   const productIds = products.map((p) => p.id);
-  //   const uniqueProducts = products.filter((p, i) => {
-  //     return products.map((product) => product.id).indexOf(p.id) == i;
-  //   });
-  //   const productsCountById = uniqueProducts.map((item, i) => ({
-  //     product: item,
-  //     count: productIds.filter((id) => id === item.id).length,
-  //   }));
 
-  //   return productsCountById;
-  // };
-  cartedProductsTotalPrice=()=> {
+  cartedProductsTotalPrice = () => {
     const products = this.props.products.cartProducts;
     const currentPriceLabel = this.props.currencies.currentCurrency.label;
-    const priceList = products.map(p=>p.product.prices.find(price => price.currency.label===currentPriceLabel)?.amount)
-    return priceList.reduce((a,b)=>a+b,0);
-  }
+    const priceList = products.map(
+      (p) =>
+        p.product.prices.find(
+          (price) => price.currency.label === currentPriceLabel
+        )?.amount * p.count
+    );
+    return priceList.reduce((a, b) => a + b, 0);
+  };
   render() {
     // const productList = this.countSameProducts();
-    const { cartProductById, uncartProduct, products } = this.props;
+    const { cartProductByCustomId, uncartProduct, products } = this.props;
     return (
       <OverlayContainer>
         <OverlayTitle>
@@ -174,11 +171,19 @@ export class CartOverlay extends Component {
               </ItemInfo>
               <ItemControls>
                 <div>
-                  <PlusSquareIcon onClick={() => cartProductById(product.id)} width={'35px'} height={'35px'}/>
+                  <PlusSquareIcon
+                    onClick={() => cartProductByCustomId(product.customId)}
+                    width={"35px"}
+                    height={"35px"}
+                  />
                 </div>
                 <div>{count} </div>
                 <div>
-                  <MinusSquareIcon onClick={() => uncartProduct(product.id)}  width={'35px'} height={'35px'}/>
+                  <MinusSquareIcon
+                    onClick={() => uncartProduct(product.customId)}
+                    width={"35px"}
+                    height={"35px"}
+                  />
                 </div>
               </ItemControls>
               <img src={product.gallery[0]}></img>
@@ -188,7 +193,10 @@ export class CartOverlay extends Component {
         <OverlaySummary>
           <Total>
             <strong>Total</strong>
-            <strong><span>{this.props.currencies.currentCurrency.symbol} </span> {this.cartedProductsTotalPrice()?.toFixed(2)}</strong>
+            <strong>
+              <span>{this.props.currencies.currentCurrency.symbol} </span>{" "}
+              {this.cartedProductsTotalPrice()?.toFixed(2)}
+            </strong>
           </Total>
           <ButtonGroups>
             <button className="leftButton">View Bag</button>
@@ -206,7 +214,7 @@ const mapStateToProps = (state) => ({
   currencies: state.currencies,
 });
 const mapDispatchToProps = () => ({
-  cartProductById,
+  cartProductByCustomId,
   uncartProduct,
 });
 

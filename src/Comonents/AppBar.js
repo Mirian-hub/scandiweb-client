@@ -10,7 +10,11 @@ import {
   getProductsAsync,
   toggleCartOverlay,
 } from "../redux/slices/ProductsSlice";
-import { selectState, getCategoriesAsync, setCurrentCategory } from "../redux/slices/CategorySlice";
+import {
+  selectState,
+  getCategoriesAsync,
+  setCurrentCategory,
+} from "../redux/slices/CategorySlice";
 import { resolveObjMapThunk } from "graphql";
 import CustomSelect from "./Select/CustomSelect";
 import CustomModal from "./CustomModal";
@@ -132,14 +136,16 @@ export class AppBar extends Component {
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             <CustomSelect />
-            <CartContainer onClick={() => this.props.toggleCartOverlay(true)}>
-              <Cart />
-              <CartCircle>
-                {this.props.products.cartProducts
-                  .map((p) => p.count)
-                  .reduce((b, a) => b + a, 0)}
-              </CartCircle>
-            </CartContainer>
+            <Link to="/">
+              <CartContainer onClick={() => this.props.toggleCartOverlay(true)}>
+                <Cart />
+                <CartCircle>
+                  {this.props.products.cartProducts
+                    .map((p) => p.count)
+                    .reduce((b, a) => b + a, 0)}
+                </CartCircle>
+              </CartContainer>
+            </Link>
           </div>
         </NavBar>
       )
@@ -155,7 +161,7 @@ const mapDispatchToProps = () => ({
   getProductsAsync,
   getCategoriesAsync,
   toggleCartOverlay,
-  setCurrentCategory
+  setCurrentCategory,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps())(AppBar);

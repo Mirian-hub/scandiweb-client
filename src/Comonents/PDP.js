@@ -145,7 +145,7 @@ class PDP extends Component {
       productCopy.attributes = prod;
 
       this.setState({
-        productState: productCopy,
+        productState: {...productCopy, customId: productCopy.id + attributeName + value},
       });
     };
     const price = product?.prices?.find(
