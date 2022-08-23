@@ -1,26 +1,20 @@
-import { isNamedType } from "graphql";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as MinusSquare } from "../assets/icons/minusSquare.svg";
 import { ReactComponent as PlusSquare } from "../assets/icons/plusSquare.svg";
 import {
   cartProductByCustomId,
   uncartProduct,
+  toggleCartOverlay,
 } from "../redux/slices/ProductsSlice";
 
 const OverlayContainer = styled.div`
   flex-direction: column;
-  width: 90%;
-  margin: auto;
-  padding-bottom: 4rem;
 `;
 const OverlayTitle = styled.div`
-  font-family: "Raleway";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 32px;
-  padding: 3rem 0;
+  margin-bottom: 2rem;
 `;
 const ItemName = styled.div`
   font-weight: 300;
@@ -46,29 +40,15 @@ const OverlaySpan = styled.span`
 
 const OverlayItem = styled.div`
   display: flex;
-  padding: 1rem 0rem;
-  margin: 0 0 3rem 0;
+  margin: 3rem 0px;
   > img {
-    width: 20%;
+    width: 40%;
   }
-  border-top: 1px solid #e5e5e5;
 `;
 const ItemInfo = styled.div`
-  width: 70%;
+  width: 50%;
   display: flex;
   flex-direction: column;
-  .itemBrandStrong {
-    font-family: "Raleway";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 30px;
-  }
-  .itemBrand {
-    font-family: "Raleway";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-  }
 `;
 const ItemControls = styled.div`
   width: 10%;
@@ -92,56 +72,52 @@ const BoxItem = styled.div`
   height: ${({ color }) => (color ? "25px" : "auto")};
   border: ${({ color, selected }) => (color ? "none" : "2px solid #1d1f22")};
   outline: ${({ selected, color }) =>
-    selected && color ? "2px solid #5ECE7B" : ""};
+    selected && color ? "3px solid #5ECE7B" : ""};
   color: ${({ color, selected }) => !color && selected && "white"};
 `;
 const AttributeContainer = styled.div`
   margin-top: 5px;
-  width: 70%;
 `;
 const AttributeName = styled.div`
   padding-bottom: 5px;
-  font-weight: 700;
 `;
-const OverlaySummary = styled.div`
-border-top: 1px solid #e5e5e5;
-padding-top: 1.5rem;
-  div {
-    .name {
+const OverlaySummary = styled.div``;
+const Total = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const ButtonGroups = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 2.5rem 0px 1rem 0px;
+  a {
+    padding: 1.5rem 0px;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 48%;
+    button {
+      width: 100%;
+      padding: 1.5rem 0;
+      cursor: pointer;
       font-family: "Raleway";
       font-style: normal;
-      font-size: 24px;
+      font-weight: 600;
+      font-size: 16px;
     }
-    .value {
-      font-family: "Raleway";
-      font-style: normal;
-      font-weight: 700;
-      font-size: 24px;
+    .leftButton {
+      background-color: transparent;
+    }
+    .rightButton {
+      background-color: #58e984;
+      color: white;
     }
   }
 `;
-const Total = styled.div``;
-const OrderButton = styled.button`
-  margin-top: 1rem;
-  width: 20%;
-  padding: 1rem 0px;
-  text-transform: uppercase;
-  background: #5ece7b;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  :disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-`;
 
-const testTax = 21;
-
-export class Cart extends Component {
+export class CartOverlay extends Component {
   cartedProductsTotalPrice = () => {
     const products = this.props.products.cartProducts;
-    const currentPriceLabel = this.props.currencies.currentCurrency?.label;
+    const currentPriceLabel = this.props.currencies.currentCurrency.label;
     const priceList = products.map(
       (p) =>
         p.product.prices.find(
@@ -150,16 +126,17 @@ export class Cart extends Component {
     );
     return priceList.reduce((a, b) => a + b, 0);
   };
-  cartProductsCount = () => {
-    const products = this.props.products.cartProducts;
-    return products.map((p) => p.count).reduce((a, b) => a + b, 0);
-  };
   render() {
-    // const productList = this.countSameProducts();
     const { cartProductByCustomId, uncartProduct, products } = this.props;
     return (
       <OverlayContainer>
-        <OverlayTitle>CART</OverlayTitle>
+        <OverlayTitle>
+          <OverlayStrong> My Bag,</OverlayStrong>{" "}
+          <OverlaySpan>
+            {this.props.products.cartProducts.length}{" "}
+            {this.props.products.cartProducts.length > 1 ? "imtes" : "item"}
+          </OverlaySpan>
+        </OverlayTitle>
         {products.cartProducts.map(({ product, count }, i) => {
           const price = product.prices.find(
             (p) =>
@@ -168,8 +145,7 @@ export class Cart extends Component {
           return (
             <OverlayItem key={i}>
               <ItemInfo>
-                <div className="itemBrandStrong">{product.brand} </div>
-                <div className="itemBrand">{product.name} </div>
+                <ItemName>{product.name} </ItemName>
                 <ItemPrice>
                   <span>{price.currency.symbol} </span>
                   <span>{price.amount}</span>
@@ -223,30 +199,25 @@ export class Cart extends Component {
         })}
         <OverlaySummary>
           <Total>
-            <div>
-              <span className="name">Tax {testTax}% : </span>
-              <span className="value">
-                {this.props.currencies.currentCurrency?.symbol}
-                {((this.cartedProductsTotalPrice() / testTax) * 100)?.toFixed(
-                  2
-                )}
-              </span>
-            </div>
-            <div>
-              <span className="name"> Quantity : </span>
-              <span className="value"> {this.cartProductsCount()} </span>
-            </div>
-            <div>
-              <span className="name">Total : </span>
-              <span className="value">
-                {this.props.currencies.currentCurrency?.symbol}
-                {this.cartedProductsTotalPrice()?.toFixed(2)}{" "}
-              </span>{" "}
-            </div>
+            <strong>Total</strong>
+            <strong>
+              <span>{this.props.currencies.currentCurrency.symbol} </span>{" "}
+              {this.cartedProductsTotalPrice()?.toFixed(2)}
+            </strong>
           </Total>
-          <OrderButton disabled={this.cartProductsCount() === 0}>
-            Check Out
-          </OrderButton>
+          <ButtonGroups>
+            <Link to="/cart">
+              <button
+                className="leftButton"
+                onClick={() => this.props.toggleCartOverlay(false)}
+              >
+                View Bag
+              </button>
+            </Link>
+            <Link to="/cart">
+              <button className="rightButton"> Check Out </button>
+            </Link>
+          </ButtonGroups>
         </OverlaySummary>
       </OverlayContainer>
     );
@@ -261,6 +232,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = () => ({
   cartProductByCustomId,
   uncartProduct,
+  toggleCartOverlay,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps())(Cart);
+export default connect(mapStateToProps, mapDispatchToProps())(CartOverlay);

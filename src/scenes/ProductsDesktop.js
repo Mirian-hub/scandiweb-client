@@ -1,17 +1,13 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import styled from "styled-components";
-import ProductCard from "./ProductCard";
+import ProductCard from "../components/ProductCard";
 
-import { useSelector, connect } from "react-redux";
+import { connect } from "react-redux";
 import {
-  selectState,
   getProductsAsync,
   toggleCartOverlay,
 } from "../redux/slices/ProductsSlice";
-import CustomModal from "./CustomModal";
-import CartOverlay from "./CartOverlay";
-import { withRouter } from "./HOC/withRouter";
+import { withRouter } from "../components/HOC/withRouter";
 
 const CardsContainer = styled.div`
   position: relative;
@@ -31,18 +27,17 @@ const CardsContent = styled.div`
     line-height: 160%;
   }
 `;
-export class ProductDesktop extends Component {
-
+export class ProductsDesktop extends Component {
   constructor(props) {
     super(props);
     this.state = { active: false, category: null };
-    getProductsAsync(this.props.router.location.pathname?.substring(1))
+    getProductsAsync(this.props.router.location.pathname?.substring(1));
   }
-  capitalizeFirstLetter = (str)  => (str && str.charAt(0).toUpperCase() + str.slice(1))
+  capitalizeFirstLetter = (str) =>
+    str && str.charAt(0).toUpperCase() + str.slice(1);
   render() {
-
     return (
-      <CardsContainer>  
+      <CardsContainer>
         <CardsContent>
           <p
             className="categoryP"
@@ -64,7 +59,6 @@ export class ProductDesktop extends Component {
             ))}
           </div>
         </CardsContent>
-
       </CardsContainer>
     );
   }
@@ -80,4 +74,7 @@ const mapDispatchToProps = () => ({
   toggleCartOverlay,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps())(withRouter(ProductDesktop));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps()
+)(withRouter(ProductsDesktop));

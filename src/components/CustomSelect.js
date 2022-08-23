@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import { useDispatch, useSelector, connect } from "react-redux";
+import { connect } from "react-redux";
 import styled from "styled-components";
-import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
-import { changeCurrency } from "../../redux/slices/CurrenciesSlice";
-import OutsideClick from "../HOC/OutsideClick";
-import {
-  selectState,
-  getCurrenciesAsync,
-} from "../../redux/slices/CurrenciesSlice";
-import { toggleCartOverlay } from "../../redux/slices/ProductsSlice";
+import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
+import { changeCurrency } from "../redux/slices/CurrenciesSlice";
+import { getCurrenciesAsync } from "../redux/slices/CurrenciesSlice";
+import { toggleCartOverlay } from "../redux/slices/ProductsSlice";
 
 const DropDownContainer = styled("div")`
   margin: 0 auto;
@@ -61,6 +56,9 @@ const ListItem = styled("li")`
     background-color: #eeeeee;
   }
   color: #1d1f22;
+  .symbolDiv {
+    width: 40%;
+  }
 `;
 class CustomSelect extends Component {
   constructor(props) {
@@ -121,7 +119,7 @@ class CustomSelect extends Component {
                   onClick={this.onOptionClicked(option)}
                   key={Math.random()}
                 >
-                  <div style={{ width: "40%" }}> {option.symbol} </div>{" "}
+                  <div className="symbolDiv"> {option.symbol} </div>{" "}
                   <div> {option.label} </div>
                 </ListItem>
               ))}

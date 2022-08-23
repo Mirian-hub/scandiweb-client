@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { withRouter } from "./HOC/withRouter";
+import { withRouter } from "../components/HOC/withRouter";
 import { getProductAsync } from "../redux/slices/ProductsSlice";
 import { connect } from "react-redux";
 import { cartProduct } from "../redux/slices/ProductsSlice";
@@ -117,7 +117,6 @@ class PDP extends Component {
     const product = this.state.productState;
     const onItemClickHandler = (e, attributeName, value) => {
       var productCopy = { ...product };
-      // debugger;
       var attributeIndex = productCopy.attributes
         .map((a) => a.id)
         .indexOf(attributeName);
@@ -135,7 +134,6 @@ class PDP extends Component {
       });
       const prod = productCopy.attributes.map((it, i) => {
         if (i == attributeIndex) {
-          // debugger;
           const { items, ...rest } = it;
           return { ...rest, items: itemsCopy };
         } else {
@@ -145,7 +143,10 @@ class PDP extends Component {
       productCopy.attributes = prod;
 
       this.setState({
-        productState: {...productCopy, customId: productCopy.id + attributeName + value},
+        productState: {
+          ...productCopy,
+          customId: productCopy.id + attributeName + value,
+        },
       });
     };
     const price = product?.prices?.find(
@@ -210,7 +211,7 @@ class PDP extends Component {
                 <span>{price.amount}</span>
               </PriceContainer>
               <button
-              disabled = {product.inStock === false}
+                disabled={product.inStock === false}
                 className="addToCartBtn"
                 onClick={() => {
                   this.props.cartProduct(this.state.productState);

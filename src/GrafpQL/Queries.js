@@ -50,7 +50,6 @@ export const LOAD_CURRENCIES = gql`
 `;
 
 export const getLoadProductQuery = (id) => {
-  console.log("idid", id);
   return gql`
   query {
     product (id: "${id}") {

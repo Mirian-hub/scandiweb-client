@@ -9,12 +9,12 @@ export const ModalBlock = styled.div`
   overflow: hidden;
   padding: 0.4rem;
   position: absolute;
-  top:0;
+  top: 0;
   right: 0;
   display: flex;
   opacity: 1;
   z-index: 400;
-  overflow:hidden ;
+  overflow: hidden;
 `;
 
 export const ModalOverlay = styled.a`
@@ -39,11 +39,11 @@ export const ModalContainer = styled.div`
   animation: slide-down 0.2s ease 1;
   z-index: 1000;
   box-shadow: 0 0.2rem 0.5rem rgba(48, 55, 66, 0.3);
-  position:absolute ;
-  top:${props => props.top || 0};;
-  right:${props => props.right || 0};;
-  width: ${props => props.width || '100%'};
-  height: ${props => props.height || 'auto'};
+  position: absolute;
+  top: ${(props) => props.top || 0};
+  right: ${(props) => props.right || 0};
+  width: ${(props) => props.width || "100%"};
+  height: ${(props) => props.height || "auto"};
 `;
 
 export const ModalBody = styled.div`
@@ -52,23 +52,22 @@ export const ModalBody = styled.div`
   position: relative;
 `;
 
-
-
-
-
-
-
-
 export default class CustomModal extends Component {
   render() {
-    const { children, active, hideModal, width, height, top, right } = this.props;
+    const { children, active, hideModal, width, height, top, right } =
+      this.props;
 
     return (
       <>
         {active && (
-          <ModalBlock >
+          <ModalBlock>
             <ModalOverlay onMouseEnter={() => hideModal()}></ModalOverlay>
-            <ModalContainer width={width} height={height} top={top} right={right}>
+            <ModalContainer
+              width={width}
+              height={height}
+              top={top}
+              right={right}
+            >
               <ModalBody>{children}</ModalBody>
             </ModalContainer>
           </ModalBlock>

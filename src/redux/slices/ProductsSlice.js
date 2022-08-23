@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 import { getProduct } from "../../services/product";
 import { getProducts } from "../../services/products";
-var equal = require("deep-equal");
+
 const initialState = {
   status: "idle",
   products: [],
@@ -20,7 +19,6 @@ export const getProductsAsync = createAsyncThunk(
 
 export const getProductAsync = createAsyncThunk("getProduct", async (id) => {
   const response = await getProduct(id);
-  const res = response.product;
   return response.product;
 });
 
@@ -29,7 +27,6 @@ export const ProductsSlice = createSlice({
   initialState,
   reducers: {
     cartProductById(state, action) {
-      // debugger
       const cartProduct = state.cartProducts.find(
         (p) => p.product.id === action.payload
       );
@@ -47,7 +44,6 @@ export const ProductsSlice = createSlice({
       state.cartProducts.find((p) => p.product.customId === action.payload).count++;
     },
     cartProduct(state, action) {
-      const productFromAction = action.payload;
       const productFromCart = state.cartProducts.find(
         (p) => p.product.customId === action.payload.customId
       );

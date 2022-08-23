@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Routes from "../routes";
 import CartOverlay from "./CartOverlay";
-import CustomModal from "./CustomModal";
+import CustomModal from "../components/CustomModal";
 import { toggleCartOverlay } from "../redux/slices/ProductsSlice";
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 import styled from "styled-components";
 
 const Main = styled.main`
@@ -12,7 +12,6 @@ const Main = styled.main`
 
 class AppContent extends Component {
   render() {
-   
     return (
       <Main>
         <Routes />

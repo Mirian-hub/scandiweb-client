@@ -1,8 +1,8 @@
 import React from 'react'
 import {Switch, Route, Routes as RoutesGroup } from 'react-router-dom'
-import Cart from './Comonents/Cart'
-import PDP from './Comonents/PDP'
-import ProductDesktop from './Comonents/ProductDesktop'
+import Cart from './scenes/Cart'
+import PDP from './scenes/PDP'
+import ProductDesktop from './scenes/ProductsDesktop'
 
 const Routes = () => (
   <RoutesGroup>

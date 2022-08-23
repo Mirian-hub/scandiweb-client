@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/icons/logo.svg";
-import { ReactComponent as Currancy } from "../assets/icons/currancy.svg";
-import { ReactComponent as ArrowDown } from "../assets/icons/arrow-down.svg";
 import { ReactComponent as Cart } from "../assets/icons/cart.svg";
-import { Link, resolvePath } from "react-router-dom";
-import { useDispatch, useSelector, connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import {
   getProductsAsync,
   toggleCartOverlay,
@@ -15,17 +13,9 @@ import {
   getCategoriesAsync,
   setCurrentCategory,
 } from "../redux/slices/CategorySlice";
-import { resolveObjMapThunk } from "graphql";
-import CustomSelect from "./Select/CustomSelect";
-import CustomModal from "./CustomModal";
-import OutsideClick from "./HOC/OutsideClick";
-import { withRouter } from "./HOC/withRouter";
-const options = ["WOMEN", "MEN", "KIDS"];
-const selectOptions = [
-  { id: 1, name: "dollar" },
-  { id: 2, name: "EUR" },
-  { id: 3, name: "GE" },
-];
+import CustomSelect from "../components/CustomSelect";
+import { withRouter } from "../components/HOC/withRouter";
+
 const NavBar = styled.div`
   display: flex;
   margin: 0;
@@ -39,6 +29,10 @@ const NavBar = styled.div`
   ul {
     list-style-type: none;
     padding-left: 0px;
+  }
+  .rightSection {
+    display: flex;
+    align-items: center;
   }
 `;
 const NavBarLi = styled.li`
@@ -116,19 +110,12 @@ export class AppBar extends Component {
   static propTypes = {};
 
   onHomeLogoCLick = () => {
-    this.props.getProductsAsync(this.props.categories[0]);
-    this.props.setCurrentCategory(null);
-    this.setState({
-      activeId: 0,
-    });
+    const defaultCategory = this.props.categories.categories[0];
+    this.props.getProductsAsync(defaultCategory);
+    this.props.setCurrentCategory(defaultCategory);
   };
 
   render() {
-    console.log("appBar prop", this.props);
-    console.log(
-      "item current",
-      this.props.categories.currentCategory?.toLowerCase()
-    );
     return (
       this.props.products &&
       this.props.categories && (
@@ -159,14 +146,14 @@ export class AppBar extends Component {
           </ul>
           <div>
             <Link
-              to="/"
+              to={`/category?name=${this.props.categories.categories[0]}`}
               onClick={this.onHomeLogoCLick}
               onMouseEnter={() => this.props.toggleCartOverlay(false)}
             >
               <Logo />
             </Link>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="rightSection">
             <CustomSelect />
             <CartContainerLink
               to="/cart"

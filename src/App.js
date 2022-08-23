@@ -1,8 +1,8 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter } from "react-router-dom";
-import AppBar from "./Comonents/AppBar";
-import AppContent from "./Comonents/AppContent";
+import AppBar from "./scenes/AppBar";
+import AppContent from "./scenes/AppContent";
 
 function App() {
   return (

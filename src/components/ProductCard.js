@@ -1,8 +1,7 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Link, resolvePath } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { ReactComponent as CartGreen } from "../assets/icons/cartGreen.svg";
 import { cartProductById, uncartProduct } from "../redux/slices/ProductsSlice";
@@ -75,7 +74,6 @@ const CartImg = styled.img`
 
 class ProductCard extends Component {
   render() {
-    console.log("ProductCard", this.props);
     const { gallery, name, prices, inStock, id } = this.props.data;
     const price = prices.find(
       (x) => x.currency.label === this.props.currency.label
