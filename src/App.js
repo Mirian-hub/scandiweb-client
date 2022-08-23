@@ -1,17 +1,15 @@
 import logo from "./logo.svg";
 import "./App.css";
-import Routes from "./routes";
 import { BrowserRouter } from "react-router-dom";
 import AppBar from "./Comonents/AppBar";
+import AppContent from "./Comonents/AppContent";
 
 function App() {
   return (
     <>
       <BrowserRouter>
       <AppBar/>
-        <main>
-          <Routes />
-        </main>
+      <AppContent/>
       </BrowserRouter>
     </>
   );

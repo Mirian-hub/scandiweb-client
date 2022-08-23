@@ -104,6 +104,8 @@ const AttributeName = styled.div`
   font-weight: 700;
 `;
 const OverlaySummary = styled.div`
+border-top: 1px solid #e5e5e5;
+padding-top: 1.5rem;
   div {
     .name {
       font-family: "Raleway";
@@ -243,8 +245,7 @@ export class Cart extends Component {
             </div>
           </Total>
           <OrderButton disabled={this.cartProductsCount() === 0}>
-            {" "}
-            Chech Out{" "}
+            Check Out
           </OrderButton>
         </OverlaySummary>
       </OverlayContainer>

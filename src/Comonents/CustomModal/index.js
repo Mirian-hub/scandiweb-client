@@ -37,7 +37,7 @@ export const ModalContainer = styled.div`
   max-width: 850px;
   padding: 0 0.8rem;
   animation: slide-down 0.2s ease 1;
-  z-index: 1;
+  z-index: 1000;
   box-shadow: 0 0.2rem 0.5rem rgba(48, 55, 66, 0.3);
   position:absolute ;
   top:${props => props.top || 0};;
@@ -61,13 +61,13 @@ export const ModalBody = styled.div`
 
 export default class CustomModal extends Component {
   render() {
-    const { title, footer, children, active, hideModal, width, height, top, right } = this.props;
+    const { children, active, hideModal, width, height, top, right } = this.props;
 
     return (
       <>
         {active && (
-          <ModalBlock active={active} >
-            <ModalOverlay onClick={() => hideModal()}></ModalOverlay>
+          <ModalBlock >
+            <ModalOverlay onMouseEnter={() => hideModal()}></ModalOverlay>
             <ModalContainer width={width} height={height} top={top} right={right}>
               <ModalBody>{children}</ModalBody>
             </ModalContainer>

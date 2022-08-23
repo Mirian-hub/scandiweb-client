@@ -18,6 +18,7 @@ import {
 import { resolveObjMapThunk } from "graphql";
 import CustomSelect from "./Select/CustomSelect";
 import CustomModal from "./CustomModal";
+import OutsideClick from "./HOC/OutsideClick";
 const options = ["WOMEN", "MEN", "KIDS"];
 const selectOptions = [
   { id: 1, name: "dollar" },
@@ -60,7 +61,11 @@ const RouterLink = styled(Link)`
     color: #5ECE7B
   `}
 `;
-const CartContainer = styled.a`
+
+const CartContainerLink = styled(Link)`
+  padding-left: 2rem;
+`;
+const CartContainer = styled.div`
   padding: "0px 10px";
   margin-left: "15px";
   margin-right: 15px;
@@ -83,7 +88,7 @@ const CartCircle = styled.div`
 export class AppBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeId: 0, active: false };
+    this.state = { activeId: 0, active: false, selectOpen: true };
     props.getCategoriesAsync().then((res) => {
       // debugger
       props.getProductsAsync(res.payload[0].name);
@@ -98,6 +103,7 @@ export class AppBar extends Component {
 
   onHomeLogoCLick = () => {
     this.props.getProductsAsync(this.props.categories[0]);
+    this.props.setCurrentCategory(null);
     this.setState({
       activeId: 0,
     });
@@ -107,8 +113,8 @@ export class AppBar extends Component {
     return (
       this.props.products &&
       this.props.categories && (
-        <NavBar>
-          <ul>
+        <NavBar >
+          <ul onMouseEnter={() => this.props.toggleCartOverlay(false)}>
             {this.props.categories?.map((item, i) => (
               <NavBarLi
                 key={i}
@@ -130,14 +136,21 @@ export class AppBar extends Component {
             ))}
           </ul>
           <div>
-            <Link to="/" onClick={this.onHomeLogoCLick}>
+            <Link
+              to="/"
+              onClick={this.onHomeLogoCLick}
+              onMouseEnter={() => this.props.toggleCartOverlay(false)}
+            >
               <Logo />
             </Link>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <CustomSelect />
-            <Link to="/">
-              <CartContainer onClick={() => this.props.toggleCartOverlay(true)}>
+            
+              <CustomSelect />
+            <CartContainerLink to="/cart" onClick={()=> this.props.toggleCartOverlay(false)}>
+              <CartContainer
+                onMouseEnter={() => this.props.toggleCartOverlay(true)}
+              >
                 <Cart />
                 <CartCircle>
                   {this.props.products.cartProducts
@@ -145,7 +158,7 @@ export class AppBar extends Component {
                     .reduce((b, a) => b + a, 0)}
                 </CartCircle>
               </CartContainer>
-            </Link>
+            </CartContainerLink>
           </div>
         </NavBar>
       )

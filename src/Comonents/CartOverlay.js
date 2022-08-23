@@ -1,12 +1,14 @@
 import { isNamedType } from "graphql";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as MinusSquare } from "../assets/icons/minusSquare.svg";
 import { ReactComponent as PlusSquare } from "../assets/icons/plusSquare.svg";
 import {
   cartProductByCustomId,
   uncartProduct,
+  toggleCartOverlay
 } from "../redux/slices/ProductsSlice";
 
 const OverlayContainer = styled.div`
@@ -71,7 +73,7 @@ const BoxItem = styled.div`
   height: ${({ color }) => (color ? "25px" : "auto")};
   border: ${({ color, selected }) => (color ? "none" : "2px solid #1d1f22")};
   outline: ${({ selected, color }) =>
-    selected && color ? "2px solid #5ECE7B" : ""};
+    selected && color ? "3px solid #5ECE7B" : ""};
   color: ${({ color, selected }) => !color && selected && "white"};
 `;
 const AttributeContainer = styled.div`
@@ -89,24 +91,31 @@ const ButtonGroups = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 2.5rem 0px 1rem 0px;
-  > button {
-    width: 48%;
+  a {
     padding: 1.5rem 0px;
     text-transform: uppercase;
     cursor: pointer;
-  }
-  .rightButton {
-    background: #5ece7b;
-    color: #ffffff;
-    border: none;
-  }
-  .leftButton {
-    background: none;
+    width: 48%;
+    button {
+      width: 100%;
+      padding: 1.5rem 0;
+      cursor: pointer;
+      font-family: "Raleway";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .leftButton {
+      background-color: transparent;
+    }
+    .rightButton {
+      background-color: #58e984;
+      color: white;
+    }
   }
 `;
 
 export class CartOverlay extends Component {
-
   cartedProductsTotalPrice = () => {
     const products = this.props.products.cartProducts;
     const currentPriceLabel = this.props.currencies.currentCurrency.label;
@@ -199,8 +208,12 @@ export class CartOverlay extends Component {
             </strong>
           </Total>
           <ButtonGroups>
-            <button className="leftButton">View Bag</button>
-            <button className="rightButton"> Chech Out </button>
+            <Link to="/cart">
+              <button className="leftButton" onClick={() => this.props.toggleCartOverlay(false)}>View Bag</button>
+            </Link>
+            <Link to="/cart">
+              <button className="rightButton"> Check Out </button>
+            </Link>
           </ButtonGroups>
         </OverlaySummary>
       </OverlayContainer>
@@ -216,6 +229,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = () => ({
   cartProductByCustomId,
   uncartProduct,
+  toggleCartOverlay
 });
 
 export default connect(mapStateToProps, mapDispatchToProps())(CartOverlay);

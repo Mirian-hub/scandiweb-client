@@ -38,7 +38,6 @@ export class ProductDesktop extends Component {
   capitalizeFirstLetter = (str)  => (str && str.charAt(0).toUpperCase() + str.slice(1))
   render() {
     const { currentCategory } = this.props.categories;
-    // console.log(this.props.categories)
     return (
       <CardsContainer>
         <CardsContent>
@@ -62,16 +61,7 @@ export class ProductDesktop extends Component {
             ))}
           </div>
         </CardsContent>
-        <CustomModal
-          active={this.props.products.cartOverlayOpen}
-          hideModal={() => this.props.toggleCartOverlay(false)}
-          title="Modal title goes here"
-          width={"500px"}
-          top={0}
-          right={"7rem"}
-        >
-          <CartOverlay />
-        </CustomModal>
+
       </CardsContainer>
     );
   }

@@ -3,22 +3,24 @@ import ReactDOM from "react-dom";
 import { useDispatch, useSelector, connect } from "react-redux";
 import styled from "styled-components";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
-import {changeCurrency} from "../../redux/slices/CurrenciesSlice"
+import { changeCurrency } from "../../redux/slices/CurrenciesSlice";
+import OutsideClick from "../HOC/OutsideClick";
 import {
   selectState,
   getCurrenciesAsync,
 } from "../../redux/slices/CurrenciesSlice";
+import { toggleCartOverlay } from "../../redux/slices/ProductsSlice";
 
 const DropDownContainer = styled("div")`
   margin: 0 auto;
   align-items: center;
-  width: 4rem
+  width: 4rem;
 `;
 
 const ArrowIcon = styled(ArrowDown)`
-  margin-left:5px ;
-  transform: ${(props) => (props.isOpen ? `rotate(180deg)` : '')};
-  transition: transform .2s ease-out;
+  margin-left: 5px;
+  transform: ${(props) => (props.isOpen ? `rotate(180deg)` : "")};
+  transition: transform 0.2s ease-out;
 `;
 
 const DropDownHeader = styled("div")`
@@ -63,6 +65,7 @@ const ListItem = styled("li")`
 class CustomSelect extends Component {
   constructor(props) {
     super(props);
+    this.ref = React.createRef();
     this.state = { isOpen: false, selectedOption: null };
     props.getCurrenciesAsync();
   }
@@ -74,23 +77,44 @@ class CustomSelect extends Component {
     });
 
   onOptionClicked = (value) => () => {
-    this.props.changeCurrency(value)
+    this.props.changeCurrency(value);
     this.setState({
       selectedOption: value,
       isOpen: false,
     });
   };
 
+  componentDidUpdate(prevProps) {
+    const checkIfClickedOutside = (e) => {
+      if (
+        this.state.isOpen &&
+        this.ref.current &&
+        !this.ref.current.contains(e.target)
+      ) {
+        this.setState({
+          isOpen: false,
+        });
+      }
+    };
+    document.addEventListener("click", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("click", checkIfClickedOutside);
+    };
+  }
+
   render() {
     return (
-      <DropDownContainer>
+      <DropDownContainer
+        ref={this.ref}
+        onMouseEnter={() => this.props.toggleCartOverlay(false)}
+      >
         <DropDownHeader onClick={this.toggling}>
           {this.state.selectedOption?.symbol ??
             this.props.currencies.currencies[0]?.symbol}
           <ArrowIcon isOpen={this.state.isOpen} />
         </DropDownHeader>
         {this.state.isOpen && (
-          <DropDownListContainer>
+          <DropDownListContainer onMouseLeave={this.toggling}>
             <DropDownList>
               {this.props.currencies.currencies.map((option) => (
                 <ListItem
@@ -114,7 +138,8 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = () => ({
   getCurrenciesAsync,
-  changeCurrency
+  changeCurrency,
+  toggleCartOverlay,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps())(CustomSelect);
