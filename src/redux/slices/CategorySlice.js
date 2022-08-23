@@ -27,12 +27,10 @@ export const CategorySlice = createSlice({
     builder
       .addCase(getCategoriesAsync.pending, (state) => {
         state.status = "loading";
-        console.log('loading')
       })
       .addCase(getCategoriesAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.categories = action.payload.map(x => x.name);
-        console.log('state', state.categories)
       });
   },
 });
