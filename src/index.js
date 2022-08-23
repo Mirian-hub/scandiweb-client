@@ -5,7 +5,7 @@ import App from "./App";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import { ApolloProvider } from "@apollo/client";
-import apoloClient from "./GrafpQL";
+import apoloClient from "./graphQl";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

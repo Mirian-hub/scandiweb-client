@@ -1,4 +1,4 @@
-import apoloClient from "../GrafpQL";
+import apoloClient from "../graphQl";
 
 class Api {
   async call(query) {

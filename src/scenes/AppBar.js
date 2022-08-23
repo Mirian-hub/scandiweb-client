@@ -99,6 +99,7 @@ export class AppBar extends Component {
         props.setCurrentCategory(category);
       } else {
         props.getProductsAsync(res.payload[0].name);
+        props.setCurrentCategory(res.payload[0].name);
       }
     });
   }
