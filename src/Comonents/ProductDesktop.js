@@ -11,6 +11,7 @@ import {
 } from "../redux/slices/ProductsSlice";
 import CustomModal from "./CustomModal";
 import CartOverlay from "./CartOverlay";
+import { withRouter } from "./HOC/withRouter";
 
 const CardsContainer = styled.div`
   position: relative;
@@ -31,15 +32,17 @@ const CardsContent = styled.div`
   }
 `;
 export class ProductDesktop extends Component {
+
   constructor(props) {
     super(props);
     this.state = { active: false, category: null };
+    getProductsAsync(this.props.router.location.pathname?.substring(1))
   }
   capitalizeFirstLetter = (str)  => (str && str.charAt(0).toUpperCase() + str.slice(1))
   render() {
-    const { currentCategory } = this.props.categories;
+
     return (
-      <CardsContainer>
+      <CardsContainer>  
         <CardsContent>
           <p
             className="categoryP"
@@ -49,7 +52,7 @@ export class ProductDesktop extends Component {
               })
             }
           >
-            {this.capitalizeFirstLetter(currentCategory)}
+            {this.capitalizeFirstLetter(this.props.categories.currentCategory)}
           </p>
           <div className="content">
             {this.props.products.products.map((item, i) => (
@@ -77,4 +80,4 @@ const mapDispatchToProps = () => ({
   toggleCartOverlay,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps())(ProductDesktop);
+export default connect(mapStateToProps, mapDispatchToProps())(withRouter(ProductDesktop));

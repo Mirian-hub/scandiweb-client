@@ -7,9 +7,7 @@ import ProductDesktop from './Comonents/ProductDesktop'
 const Routes = () => (
   <RoutesGroup>
     <Route  path={"/"}  element={<ProductDesktop/>}>  </Route>  
-    <Route  path={"/all"}  element={<ProductDesktop/>}>  </Route>  
-    <Route  path={"/clothes"}  element={<ProductDesktop/>}>  </Route>  
-    <Route  path={"/tech"}  element={<ProductDesktop/>}>  </Route>  
+    <Route  path={"/category"}  element={<ProductDesktop/>}>  </Route>  
     <Route  path={"/product/:id"}  element={<PDP/>}>  </Route>  
     <Route  path={"/cart"}  element={<Cart/>}>  </Route>  
   </RoutesGroup>

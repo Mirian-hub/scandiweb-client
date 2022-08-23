@@ -210,19 +210,18 @@ class PDP extends Component {
                 <span>{price.amount}</span>
               </PriceContainer>
               <button
+              disabled = {product.inStock === false}
                 className="addToCartBtn"
                 onClick={() => {
                   this.props.cartProduct(this.state.productState);
                 }}
               >
-                {" "}
                 ADD TO CART
               </button>
               <div
                 className="description"
                 dangerouslySetInnerHTML={{ __html: product.description }}
               ></div>
-              {/* <p className="description" dang> {product.description} </p> */}
             </ItemInfo>
           </div>
         </PDPContainer>

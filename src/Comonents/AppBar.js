@@ -19,6 +19,7 @@ import { resolveObjMapThunk } from "graphql";
 import CustomSelect from "./Select/CustomSelect";
 import CustomModal from "./CustomModal";
 import OutsideClick from "./HOC/OutsideClick";
+import { withRouter } from "./HOC/withRouter";
 const options = ["WOMEN", "MEN", "KIDS"];
 const selectOptions = [
   { id: 1, name: "dollar" },
@@ -86,12 +87,25 @@ const CartCircle = styled.div`
 `;
 
 export class AppBar extends Component {
+  checkCategoryInUri = ({ pathname, search }) => {
+    if (pathname === "/category") {
+      return search.substring(6);
+    } else return null;
+  };
   constructor(props) {
     super(props);
     this.state = { activeId: 0, active: false, selectOpen: true };
     props.getCategoriesAsync().then((res) => {
-      // debugger
-      props.getProductsAsync(res.payload[0].name);
+      const category = this.checkCategoryInUri(this.props.router.location);
+      if (
+        category &&
+        res.payload.find((n) => n.name.toLowerCase() === category.toLowerCase())
+      ) {
+        props.getProductsAsync(category);
+        props.setCurrentCategory(category);
+      } else {
+        props.getProductsAsync(res.payload[0].name);
+      }
     });
   }
   onLinkClick = (item) => {
@@ -110,12 +124,17 @@ export class AppBar extends Component {
   };
 
   render() {
+    console.log("appBar prop", this.props);
+    console.log(
+      "item current",
+      this.props.categories.currentCategory?.toLowerCase()
+    );
     return (
       this.props.products &&
       this.props.categories && (
-        <NavBar >
+        <NavBar>
           <ul onMouseEnter={() => this.props.toggleCartOverlay(false)}>
-            {this.props.categories?.map((item, i) => (
+            {this.props.categories.categories?.map((item, i) => (
               <NavBarLi
                 key={i}
                 onClick={() => {
@@ -125,9 +144,12 @@ export class AppBar extends Component {
                 }}
               >
                 <RouterLink
-                  to={item}
+                  to={`category?name=${item}`}
                   className="active"
-                  isactive={i === this.state.activeId}
+                  isactive={
+                    item?.toLowerCase() ===
+                    this.props.categories.currentCategory?.toLowerCase()
+                  }
                   onClick={() => this.onLinkClick(item)}
                 >
                   {item?.toUpperCase()}
@@ -145,9 +167,11 @@ export class AppBar extends Component {
             </Link>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            
-              <CustomSelect />
-            <CartContainerLink to="/cart" onClick={()=> this.props.toggleCartOverlay(false)}>
+            <CustomSelect />
+            <CartContainerLink
+              to="/cart"
+              onClick={() => this.props.toggleCartOverlay(false)}
+            >
               <CartContainer
                 onMouseEnter={() => this.props.toggleCartOverlay(true)}
               >
@@ -167,7 +191,7 @@ export class AppBar extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  categories: state.categories.categories,
+  categories: state.categories,
   products: state.products,
 });
 const mapDispatchToProps = () => ({
@@ -177,4 +201,7 @@ const mapDispatchToProps = () => ({
   setCurrentCategory,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps())(AppBar);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps()
+)(withRouter(AppBar));

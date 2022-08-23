@@ -35,8 +35,7 @@ const Card = styled.div`
   margin-right: 40px;
   margin-bottom: 40px;
   padding: 10px;
-  opacity: ${(props) => (!props.inStock ? "0.3" : "1")};
-
+  opacity: ${({ inStock }) => (!inStock ? "0.3" : "1")};
   &:hover ${CartButton} {
     display: ${(props) => (!props.inStock ? "none" : "block")};
   }
@@ -69,38 +68,44 @@ const Card = styled.div`
   }
 `;
 
-const CartIcon = styled(CartGreen)`
-`;
+const CartIcon = styled(CartGreen)``;
 const CartImg = styled.img`
-cursor: pointer;
+  cursor: pointer;
 `;
 
 class ProductCard extends Component {
   render() {
+    console.log("ProductCard", this.props);
     const { gallery, name, prices, inStock, id } = this.props.data;
-    const price = prices.find((x) => x.currency.label === this.props.currency.label);
-    
+    const price = prices.find(
+      (x) => x.currency.label === this.props.currency.label
+    );
+
     return (
       this.props.currency && (
         <Card inStock={inStock}>
           <div className="container">
             <div className="imgContainer">
-              <Link to={`/product/${id}`}>
-              <CartImg src={gallery[0]} />
+              {inStock ? (
+                <Link to={`/product/${id}`}>
+                  <CartImg src={gallery[0]} />
+                </Link>
+              ) : (
+                <CartImg src={gallery[0]} />
+              )}
 
-              </Link>
               <OutOfStockP inStock={inStock}> OUT OF STOCK </OutOfStockP>
-              <CartButton onClick={()=> this.props.cartProductById(id)}>
+              <CartButton onClick={() => this.props.cartProductById(id)}>
                 <CartIcon />
               </CartButton>
             </div>
 
             <p className="nameP"> {name}</p>
             <div className="priceDiv">
-              <label>{price.currency.label}</label> <label>{price.amount}</label>
+              <label>{price.currency.label}</label>{" "}
+              <label>{price.amount}</label>
             </div>
           </div>
-          
         </Card>
       )
     );
@@ -112,10 +117,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = () => ({
   cartProductById,
-  uncartProduct
+  uncartProduct,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps())(ProductCard);
-
-
-
