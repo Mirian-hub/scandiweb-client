@@ -70,7 +70,7 @@ const BoxItem = styled.div`
   align-items: center;
   width: ${({ color }) => (color ? "25px" : "45px")};
   height: ${({ color }) => (color ? "25px" : "auto")};
-  border: ${({ color, selected }) => (color ? "none" : "2px solid #1d1f22")};
+  border: ${({ color, selected }) => (color ? "1px solid #BABFC4" : "2px solid #1d1f22")};
   outline: ${({ selected, color }) =>
     selected && color ? "3px solid #5ECE7B" : ""};
   color: ${({ color, selected }) => !color && selected && "white"};
@@ -152,7 +152,7 @@ export class CartOverlay extends Component {
                 </ItemPrice>
                 {product.attributes.map((att, i) => {
                   return (
-                    <AttributeContainer>
+                    <AttributeContainer key={i}>
                       <div>
                         <AttributeName>
                           {att.name}
@@ -162,9 +162,10 @@ export class CartOverlay extends Component {
                       <BoxItemsContainer>
                         {att.items.map((item, i) => (
                           <BoxItem
+                          key={i}
                             color={
-                              att.name.toLowerCase() === "color" && item.value
-                            }
+                              att.name.toLowerCase() === "color" ? item.value: ''
+                            } 
                             selected={item.selected}
                           >
                             {att.name.toLowerCase() !== "color" &&

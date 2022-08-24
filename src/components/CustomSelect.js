@@ -14,7 +14,7 @@ const DropDownContainer = styled("div")`
 
 const ArrowIcon = styled(ArrowDown)`
   margin-left: 5px;
-  transform: ${(props) => (props.isOpen ? `rotate(180deg)` : "")};
+  transform: ${(props) => (props.isopen ? `rotate(180deg)` : "")};
   transition: transform 0.2s ease-out;
 `;
 
@@ -109,7 +109,7 @@ class CustomSelect extends Component {
         <DropDownHeader onClick={this.toggling}>
           {this.state.selectedOption?.symbol ??
             this.props.currencies.currencies[0]?.symbol}
-          <ArrowIcon isOpen={this.state.isOpen} />
+          <ArrowIcon $isopen={this.state.isOpen} />
         </DropDownHeader>
         {this.state.isOpen && (
           <DropDownListContainer onMouseLeave={this.toggling}>

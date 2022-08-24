@@ -71,7 +71,7 @@ const AttributeItem = styled.div`
   align-items: center;
   width: ${({ color }) => (color ? "2rem" : "4rem")};
   height: ${({ color }) => (color ? "2rem" : "3rem")};
-  border: ${({ color }) => (color ? "none" : "2px solid #1d1f22")};
+  border: ${({ color }) => (color ? "1px solid #BABFC4" : "2px solid #1d1f22")};
   outline: ${({ selected, color }) =>
     selected && color ? "3px solid #5ECE7B" : ""};
   color: ${({ color, selected }) => !color && selected && "white"};
@@ -193,7 +193,7 @@ class PDP extends Component {
               <div className="productName">{product.name} </div>
               {product.attributes.map((att, i) => {
                 return (
-                  <AttributeContainer>
+                  <AttributeContainer key={i}>
                     <div className="attributeName">
                       {att.name?.toUpperCase()}
                       <span>:</span>
@@ -201,12 +201,13 @@ class PDP extends Component {
                     <BoxItems>
                       {att.items.map((item, i) => (
                         <AttributeItem
+                          key={i}
                           onClick={(e) =>
                             onItemClickHandler(e, att.name, item.id)
                           }
                           selected={item.selected}
                           color={
-                            att.name.toLowerCase() === "color" && item.value
+                            att.name.toLowerCase() === "color" ? item.value: ''
                           }
                         >
                           {att.name.toLowerCase() !== "color" &&

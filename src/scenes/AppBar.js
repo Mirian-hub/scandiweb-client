@@ -134,7 +134,7 @@ export class AppBar extends Component {
                 <RouterLink
                   to={`category?name=${item}`}
                   className="active"
-                  isactive={
+                  $isactive={
                     item?.toLowerCase() ===
                     this.props.categories.currentCategory?.toLowerCase()
                   }
