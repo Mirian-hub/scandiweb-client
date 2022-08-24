@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { ReactComponent as MinusSquare } from "../assets/icons/minusSquare.svg";
 import { ReactComponent as PlusSquare } from "../assets/icons/plusSquare.svg";
+import ImageSlicer from "../components/ImageSlicer";
 import {
   cartProductByCustomId,
   uncartProduct,
@@ -216,7 +217,10 @@ export class Cart extends Component {
                   />
                 </div>
               </ItemControls>
-              <img src={product.gallery[0]}></img>
+              <div style={{width: '20%'}}>
+                <ImageSlicer sources= {product.gallery} />
+              </div>
+              {/* <img src={product.gallery[0]}></img> */}
             </OverlayItem>
           );
         })}

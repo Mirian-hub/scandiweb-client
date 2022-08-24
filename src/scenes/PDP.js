@@ -50,16 +50,6 @@ const ItemInfo = styled.div`
     font-size: 30px;
     margin-bottom: 3rem;
   }
-  .addToCartBtn {
-    background: #5ece7b;
-    color: #ffffff;
-    border: none;
-    width: 50%;
-    padding: 1rem 1.6rem;
-    font-size: 19px;
-    margin: 2rem 0rem;
-    cursor: pointer;
-  }
   .description {
     width: 100%;
   }
@@ -94,6 +84,22 @@ const AttributeContainer = styled.div`
 const AttributeName = styled.div`
   padding-bottom: 5px;
 `;
+const AddToCartBtn = styled.button`
+    background: #5ece7b;
+    color: #ffffff;
+    border: none;
+    width: 50%;
+    padding: 1rem 1.6rem;
+    font-size: 19px;
+    margin: 2rem 0rem;
+    cursor: pointer;
+    ${({ inStock }) =>
+    !inStock &&    `
+    cursor: not-allowed;
+    opacity: 0.5
+  ` }
+
+`
 
 class PDP extends Component {
   constructor(props) {
@@ -210,15 +216,16 @@ class PDP extends Component {
                 <span>{price.currency.symbol} </span>
                 <span>{price.amount}</span>
               </PriceContainer>
-              <button
+              <AddToCartBtn
                 disabled={product.inStock === false}
                 className="addToCartBtn"
+                inStock={product.inStock}
                 onClick={() => {
                   this.props.cartProduct(this.state.productState);
                 }}
               >
                 ADD TO CART
-              </button>
+              </AddToCartBtn>
               <div
                 className="description"
                 dangerouslySetInnerHTML={{ __html: product.description }}
