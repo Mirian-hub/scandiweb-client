@@ -107,7 +107,7 @@ class ProductCard extends Component {
      const modifiedItems = attributeItems.map((item, i) => {
       const firstItem = {...item[0]}
       const modifiedItem = {selected: true, ...firstItem}
-      let itemCopy = {...item}
+      let itemCopy = [...item]
       itemCopy[0] = modifiedItem
       const res = itemCopy
       return res

@@ -103,8 +103,7 @@ const AddToCartBtn = styled.button`
   cursor: pointer;
   ${({ inStock }) =>
     !inStock &&
-    `
-    cursor: not-allowed;
+    ` cursor: not-allowed;
     opacity: 0.5
   `}
 `;
@@ -115,6 +114,7 @@ class PDP extends Component {
     this.state = {
       selectedImgSrc: null,
       productState: this.props.products.product,
+      attributeSelected: false
     };
     props.getProductAsync(this.props.router.params.id);
   }
@@ -133,7 +133,6 @@ class PDP extends Component {
     const generateUniqueId = (product) => {
       let resList = [];
       product.attributes.map((att) => {
-        debugger
         att.items.map((item) => {
           if (item.selected) {
             resList.push(att.name);
@@ -142,7 +141,7 @@ class PDP extends Component {
         });
       });
       const finRes = resList.toString();
-      return finRes
+      return finRes;
     };
 
     const onItemClickHandler = (e, attributeName, value) => {
@@ -176,6 +175,7 @@ class PDP extends Component {
           ...productCopy,
           customId: generateUniqueId(productCopy),
         },
+        attributeSelected: true
       });
     };
     const price = product?.prices?.find(
@@ -241,9 +241,13 @@ class PDP extends Component {
                 <span>{price.amount}</span>
               </PriceContainer>
               <AddToCartBtn
-                disabled={product.inStock === false}
+                disabled={
+                  product.inStock === false || !this.state.attributeSelected
+                }
                 className="addToCartBtn"
-                inStock={product.inStock}
+                inStock={
+                  product.inStock 
+                }
                 onClick={() => {
                   this.props.cartProduct(this.state.productState);
                 }}
