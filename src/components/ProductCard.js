@@ -26,6 +26,8 @@ const OutOfStockP = styled.p`
   position: absolute;
   top: 170px;
   display: ${(props) => (!props.inStock ? "block" : "none")};
+  text-decoration:none ;
+  color: #8D8F9A;
 `;
 
 const Card = styled.div`
@@ -34,7 +36,7 @@ const Card = styled.div`
   margin-right: 40px;
   margin-bottom: 40px;
   padding: 10px;
-  opacity: ${({ inStock }) => (!inStock ? "0.3" : "1")};
+  opacity: ${({ inStock }) => (!inStock ? "0.5" : "1")};
   &:hover ${CartButton} {
     display: ${(props) => (!props.inStock ? "none" : "block")};
   }
@@ -50,11 +52,12 @@ const Card = styled.div`
     object-fit: cover;
     object-position: 50% 50%;
   }
-  .nameP {
+  .nameAndBrand {
     font-family: "Raleway";
     font-style: normal;
     font-weight: 100;
     font-size: 18px;
+    padding: 2rem 0 0.5rem 0;
   }
   label {
     font-family: "Raleway";
@@ -74,7 +77,7 @@ const CartImg = styled.img`
 
 class ProductCard extends Component {
   render() {
-    const { gallery, name, prices, inStock, id } = this.props.data;
+    const { gallery, name, prices, inStock, id, brand } = this.props.data;
     const price = prices.find(
       (x) => x.currency.label === this.props.currency.label
     );
@@ -84,23 +87,23 @@ class ProductCard extends Component {
         <Card inStock={inStock}>
           <div className="container">
             <div className="imgContainer">
-              {inStock ? (
-                <Link to={`/product/${id}`}>
-                  <CartImg src={gallery[0]} />
-                </Link>
-              ) : (
+              <Link to={`/product/${id}`}>
                 <CartImg src={gallery[0]} />
-              )}
+                <OutOfStockP inStock={inStock}> OUT OF STOCK </OutOfStockP>
+              </Link>
 
-              <OutOfStockP inStock={inStock}> OUT OF STOCK </OutOfStockP>
-              <CartButton onClick={() => this.props.cartProductById(id)}>
+              
+              <CartButton  onClick={() => this.props.cartProductById(id)}>
                 <CartIcon />
               </CartButton>
             </div>
+            <div className="nameAndBrand">
+              <label> {brand}</label>
+              <label> {name}</label>
+            </div>
 
-            <p className="nameP"> {name}</p>
             <div className="priceDiv">
-              <label>{price.currency.label}</label>{" "}
+              <label>{price.currency.symbol}</label>{" "}
               <label>{price.amount}</label>
             </div>
           </div>
