@@ -16,20 +16,15 @@ const OverlayContainer = styled.div`
   padding-bottom: 4rem;
 `;
 const OverlayTitle = styled.div`
-  font-family: "Raleway";
   font-style: normal;
   font-weight: 700;
   font-size: 32px;
   padding: 3rem 0;
 `;
-const ItemName = styled.div`
-  font-weight: 300;
-  font-size: 20px;
-  padding-bottom: 0.5rem;
-`;
 const ItemPrice = styled.div`
-  font-weight: 500;
-  padding-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 20px;
+  padding: 1rem 0 0.5rem 0;
 `;
 const MinusSquareIcon = styled(MinusSquare)`
   height: 100%;
@@ -37,11 +32,6 @@ const MinusSquareIcon = styled(MinusSquare)`
 `;
 const PlusSquareIcon = styled(PlusSquare)`
   cursor: pointer;
-`;
-const OverlayStrong = styled.strong``;
-const OverlaySpan = styled.span`
-  font-weight: 400;
-  font-size: 16px;
 `;
 
 const OverlayItem = styled.div`
@@ -58,13 +48,11 @@ const ItemInfo = styled.div`
   display: flex;
   flex-direction: column;
   .itemBrandStrong {
-    font-family: "Raleway";
     font-style: normal;
     font-weight: 600;
     font-size: 30px;
   }
   .itemBrand {
-    font-family: "Raleway";
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
@@ -90,13 +78,15 @@ const BoxItem = styled.div`
   align-items: center;
   width: ${({ color }) => (color ? "25px" : "45px")};
   height: ${({ color }) => (color ? "25px" : "auto")};
-  border: ${({ color, selected }) => (color ? "1px solid #BABFC4" : "2px solid #1d1f22")};
+  min-height: ${({ color }) => (!color ? "35px" : "")};
+  border: ${({ color, selected }) =>
+    color ? "1px solid #BABFC4" : "1px solid #1d1f22"};
   outline: ${({ selected, color }) =>
     selected && color ? "2px solid #5ECE7B" : ""};
   color: ${({ color, selected }) => !color && selected && "white"};
 `;
 const AttributeContainer = styled.div`
-  margin-top: 5px;
+  margin-top: 1rem;
   width: 70%;
 `;
 const AttributeName = styled.div`
@@ -108,12 +98,10 @@ const OverlaySummary = styled.div`
   padding-top: 1.5rem;
   div {
     .name {
-      font-family: "Raleway";
       font-style: normal;
       font-size: 24px;
     }
     .value {
-      font-family: "Raleway";
       font-style: normal;
       font-weight: 700;
       font-size: 24px;
@@ -179,16 +167,18 @@ export class Cart extends Component {
                     <AttributeContainer key={i}>
                       <div>
                         <AttributeName>
-                          {att.name}
+                          {att.name?.toUpperCase()}
                           <span>:</span>
                         </AttributeName>
                       </div>
                       <BoxItemsContainer>
                         {att.items.map((item, i) => (
                           <BoxItem
-                          key={i}
+                            key={i}
                             color={
-                              att.name.toLowerCase() === "color" ? item.value: ''
+                              att.name.toLowerCase() === "color"
+                                ? item.value
+                                : ""
                             }
                             selected={item.selected}
                           >
@@ -218,8 +208,8 @@ export class Cart extends Component {
                   />
                 </div>
               </ItemControls>
-              <div style={{width: '20%'}}>
-                <ImageSlicer sources= {product.gallery} />
+              <div style={{ width: "20%" }}>
+                <ImageSlicer sources={product.gallery} />
               </div>
               {/* <img src={product.gallery[0]}></img> */}
             </OverlayItem>
@@ -249,7 +239,7 @@ export class Cart extends Component {
             </div>
           </Total>
           <OrderButton disabled={this.cartProductsCount() === 0}>
-            Check Out
+            ORDER
           </OrderButton>
         </OverlaySummary>
       </OverlayContainer>

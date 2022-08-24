@@ -18,7 +18,6 @@ const CartButton = styled.button`
 
 const OutOfStockP = styled.p`
   text-align: center;
-  font-family: "Raleway";
   font-style: normal;
   font-weight: 40;
   font-size: 28px;
@@ -26,8 +25,8 @@ const OutOfStockP = styled.p`
   position: absolute;
   top: 170px;
   display: ${(props) => (!props.inStock ? "block" : "none")};
-  text-decoration:none ;
-  color: #8D8F9A;
+  text-decoration: none;
+  color: #8d8f9a;
 `;
 
 const Card = styled.div`
@@ -53,20 +52,24 @@ const Card = styled.div`
     object-position: 50% 50%;
   }
   .nameAndBrand {
-    font-family: "Raleway";
     font-style: normal;
     font-weight: 100;
     font-size: 18px;
     padding: 2rem 0 0.5rem 0;
-  }
-  label {
-    font-family: "Raleway";
+    label {
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
   }
+  }
+  
   .priceDiv {
     margin-bottom: 15px;
+    font-family: "Raleway";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 160%;
   }
 `;
 
@@ -92,8 +95,7 @@ class ProductCard extends Component {
                 <OutOfStockP inStock={inStock}> OUT OF STOCK </OutOfStockP>
               </Link>
 
-              
-              <CartButton  onClick={() => this.props.cartProductById(id)}>
+              <CartButton onClick={() => this.props.cartProductById(id)}>
                 <CartIcon />
               </CartButton>
             </div>

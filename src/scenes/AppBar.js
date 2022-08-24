@@ -44,7 +44,6 @@ const RouterLink = styled(Link)`
   padding: 14px 16px;
   text-decoration: none;
   color: #1d1f22;
-  font-family: "Raleway";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -134,9 +133,11 @@ export class AppBar extends Component {
                 <RouterLink
                   to={`category?name=${item}`}
                   className="active"
-                  $isactive={
+                  isactive={
                     item?.toLowerCase() ===
                     this.props.categories.currentCategory?.toLowerCase()
+                      ? 1
+                      : 0
                   }
                   onClick={() => this.onLinkClick(item)}
                 >

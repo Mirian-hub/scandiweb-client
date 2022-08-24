@@ -20,9 +20,8 @@ const ArrowIcon = styled(ArrowDown)`
 
 const DropDownHeader = styled("div")`
   padding: 0.4em 0.5em 0.4em 1em;
-  font-family: "Raleway";
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 18px;
   line-height: 160%;
   color: #1d1f22;
@@ -38,7 +37,7 @@ const DropDownListContainer = styled("div")`
 const DropDownList = styled("ul")`
   /* padding: 0px 1rem; */
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;
   background: #ffffff;
   &:first-child {
     padding-top: 0.2em;
@@ -48,8 +47,11 @@ const DropDownList = styled("ul")`
 
 const ListItem = styled("li")`
   list-style: none;
-  /* margin-bottom: 0.8em; */
-  padding: 1rem 1rem;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 160%;
+  padding: 0.4rem 1rem;
   cursor: pointer;
   display: flex;
   &:hover {

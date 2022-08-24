@@ -36,9 +36,12 @@ const PDPContainer = styled.div`
   }
 `;
 const PriceContainer = styled.div`
-  font-weight: 500;
+  font-weight: 600;
   margin-top: 1rem;
-  font-size: 19px;
+  font-size: 18px;
+  .title {
+    padding-bottom: 1rem;
+  }
 `;
 
 const ItemInfo = styled.div`
@@ -71,7 +74,7 @@ const AttributeItem = styled.div`
   align-items: center;
   width: ${({ color }) => (color ? "2rem" : "4rem")};
   height: ${({ color }) => (color ? "2rem" : "3rem")};
-  border: ${({ color }) => (color ? "1px solid #BABFC4" : "2px solid #1d1f22")};
+  border: ${({ color }) => (color ? "1px solid #BABFC4" : "1px solid #1d1f22")};
   outline: ${({ selected, color }) =>
     selected && color ? "3px solid #5ECE7B" : ""};
   color: ${({ color, selected }) => !color && selected && "white"};

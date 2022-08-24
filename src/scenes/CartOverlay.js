@@ -22,7 +22,7 @@ const ItemName = styled.div`
   padding-bottom: 0.5rem;
 `;
 const ItemPrice = styled.div`
-  font-weight: 500;
+  font-weight: 600;
   padding-bottom: 0.5rem;
 `;
 const MinusSquareIcon = styled(MinusSquare)`
@@ -32,15 +32,20 @@ const MinusSquareIcon = styled(MinusSquare)`
 const PlusSquareIcon = styled(PlusSquare)`
   cursor: pointer;
 `;
-const OverlayStrong = styled.strong``;
+const OverlayStrong = styled.strong`
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+`;
 const OverlaySpan = styled.span`
+  font-style: normal;
   font-weight: 400;
   font-size: 16px;
 `;
 
 const OverlayItem = styled.div`
   display: flex;
-  margin: 3rem 0px;
+  margin: 4rem 0px;
   > img {
     width: 40%;
   }
@@ -70,13 +75,15 @@ const BoxItem = styled.div`
   align-items: center;
   width: ${({ color }) => (color ? "25px" : "45px")};
   height: ${({ color }) => (color ? "25px" : "auto")};
-  border: ${({ color, selected }) => (color ? "1px solid #BABFC4" : "2px solid #1d1f22")};
+  min-height: ${({ color }) => (!color ? "30px" : "")};
+  border: ${({ color, selected }) =>
+    color ? "1px solid #BABFC4" : "1px solid #1d1f22"};
   outline: ${({ selected, color }) =>
     selected && color ? "3px solid #5ECE7B" : ""};
   color: ${({ color, selected }) => !color && selected && "white"};
 `;
 const AttributeContainer = styled.div`
-  margin-top: 5px;
+  margin-top: 1rem;
 `;
 const AttributeName = styled.div`
   padding-bottom: 5px;
@@ -99,17 +106,18 @@ const ButtonGroups = styled.div`
       width: 100%;
       padding: 1.5rem 0;
       cursor: pointer;
-      font-family: "Raleway";
       font-style: normal;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 16px;
     }
     .leftButton {
       background-color: transparent;
+      border: 1px solid #1d1f22;
     }
     .rightButton {
       background-color: #58e984;
       color: white;
+      border: 1px solid #1d1f22;
     }
   }
 `;
@@ -145,6 +153,7 @@ export class CartOverlay extends Component {
           return (
             <OverlayItem key={i}>
               <ItemInfo>
+                <ItemName>{product.brand} </ItemName>
                 <ItemName>{product.name} </ItemName>
                 <ItemPrice>
                   <span>{price.currency.symbol} </span>
@@ -162,10 +171,12 @@ export class CartOverlay extends Component {
                       <BoxItemsContainer>
                         {att.items.map((item, i) => (
                           <BoxItem
-                          key={i}
+                            key={i}
                             color={
-                              att.name.toLowerCase() === "color" ? item.value: ''
-                            } 
+                              att.name.toLowerCase() === "color"
+                                ? item.value
+                                : ""
+                            }
                             selected={item.selected}
                           >
                             {att.name.toLowerCase() !== "color" &&
@@ -212,11 +223,11 @@ export class CartOverlay extends Component {
                 className="leftButton"
                 onClick={() => this.props.toggleCartOverlay(false)}
               >
-                View Bag
+                VIEW BAG
               </button>
             </Link>
             <Link to="/cart">
-              <button className="rightButton"> Check Out </button>
+              <button className="rightButton"> CHECK OUT </button>
             </Link>
           </ButtonGroups>
         </OverlaySummary>

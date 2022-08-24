@@ -20,7 +20,6 @@ const CardsContent = styled.div`
     flex-wrap: wrap;
   }
   .categoryP {
-    font-family: "Raleway";
     font-style: normal;
     font-weight: 400;
     font-size: 42px;
