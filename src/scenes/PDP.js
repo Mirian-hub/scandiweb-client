@@ -4,6 +4,8 @@ import { withRouter } from "../components/HOC/withRouter";
 import { getProductAsync } from "../redux/slices/ProductsSlice";
 import { connect } from "react-redux";
 import { cartProduct } from "../redux/slices/ProductsSlice";
+import parse from "html-react-parser";
+
 const PDPContainer = styled.div`
   width: 90%;
   margin: auto;
@@ -63,13 +65,17 @@ const BoxItems = styled.div`
 const AttributeItem = styled.div`
   display: flex;
   margin-right: 5px;
-  background: ${({ color }) => color ?? ""};
+  background: ${({ color, selected }) =>
+    color ? color : selected ? "black" : ""};
   justify-content: center;
   align-items: center;
   width: ${({ color }) => (color ? "2rem" : "4rem")};
   height: ${({ color }) => (color ? "2rem" : "3rem")};
   border: ${({ color }) => (color ? "none" : "2px solid #1d1f22")};
-  outline: ${({ selected }) => (selected ? "3px solid #5ECE7B" : "")};
+  outline: ${({ selected, color }) =>
+    selected && color ? "3px solid #5ECE7B" : ""};
+  color: ${({ color, selected }) => !color && selected && "white"};
+
 `;
 
 const AttributeContainer = styled.div`
@@ -85,21 +91,21 @@ const AttributeName = styled.div`
   padding-bottom: 5px;
 `;
 const AddToCartBtn = styled.button`
-    background: #5ece7b;
-    color: #ffffff;
-    border: none;
-    width: 50%;
-    padding: 1rem 1.6rem;
-    font-size: 19px;
-    margin: 2rem 0rem;
-    cursor: pointer;
-    ${({ inStock }) =>
-    !inStock &&    `
+  background: #5ece7b;
+  color: #ffffff;
+  border: none;
+  width: 50%;
+  padding: 1rem 1.6rem;
+  font-size: 19px;
+  margin: 2rem 0rem;
+  cursor: pointer;
+  ${({ inStock }) =>
+    !inStock &&
+    `
     cursor: not-allowed;
     opacity: 0.5
-  ` }
-
-`
+  `}
+`;
 
 class PDP extends Component {
   constructor(props) {
@@ -226,10 +232,7 @@ class PDP extends Component {
               >
                 ADD TO CART
               </AddToCartBtn>
-              <div
-                className="description"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              ></div>
+              <div className="description">{parse(product.description)}</div>
             </ItemInfo>
           </div>
         </PDPContainer>
