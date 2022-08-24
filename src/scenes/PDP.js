@@ -242,14 +242,14 @@ class PDP extends Component {
               </PriceContainer>
               <AddToCartBtn
                 disabled={
-                  product.inStock === false || !this.state.attributeSelected
+                  product.inStock === false || (!this.state.attributeSelected && this.state.productState.attributes.length > 0 )
                 }
                 className="addToCartBtn"
                 inStock={
                   product.inStock 
                 }
                 onClick={() => {
-                  this.props.cartProduct(this.state.productState);
+                  this.props.cartProduct(this.state.productState.attributes.length> 0 ? this.state.productState: {...this.state.productState, customId: ''});
                 }}
               >
                 ADD TO CART
