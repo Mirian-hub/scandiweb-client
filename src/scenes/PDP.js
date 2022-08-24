@@ -78,7 +78,6 @@ const AttributeItem = styled.div`
   outline: ${({ selected, color }) =>
     selected && color ? "3px solid #5ECE7B" : ""};
   color: ${({ color, selected }) => !color && selected && "white"};
-
 `;
 
 const AttributeContainer = styled.div`
@@ -130,6 +129,22 @@ class PDP extends Component {
   }
   render() {
     const product = this.state.productState;
+
+    const generateUniqueId = (product) => {
+      let resList = [];
+      product.attributes.map((att) => {
+        debugger
+        att.items.map((item) => {
+          if (item.selected) {
+            resList.push(att.name);
+            resList.push(item.value);
+          }
+        });
+      });
+      const finRes = resList.toString();
+      return finRes
+    };
+
     const onItemClickHandler = (e, attributeName, value) => {
       var productCopy = { ...product };
       var attributeIndex = productCopy.attributes
@@ -138,7 +153,6 @@ class PDP extends Component {
       var attribute = productCopy.attributes[attributeIndex];
 
       var itemIndex = attribute.items.map((a) => a.id).indexOf(value);
-      var item = { ...attribute.items[itemIndex], selected: true };
 
       const itemsCopy = attribute.items.map((it, i) => {
         if (i == itemIndex) {
@@ -160,7 +174,7 @@ class PDP extends Component {
       this.setState({
         productState: {
           ...productCopy,
-          customId: productCopy.id + attributeName + value,
+          customId: generateUniqueId(productCopy),
         },
       });
     };
@@ -210,7 +224,7 @@ class PDP extends Component {
                           }
                           selected={item.selected}
                           color={
-                            att.name.toLowerCase() === "color" ? item.value: ''
+                            att.name.toLowerCase() === "color" ? item.value : ""
                           }
                         >
                           {att.name.toLowerCase() !== "color" &&

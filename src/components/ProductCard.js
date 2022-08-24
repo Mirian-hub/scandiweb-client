@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { ReactComponent as CartGreen } from "../assets/icons/cartGreen.svg";
-import { cartProductById, uncartProduct } from "../redux/slices/ProductsSlice";
+import { cartProductById, uncartProduct, cartProduct } from "../redux/slices/ProductsSlice";
+import { argsToArgsConfig } from "graphql/type/definition";
 const CartButton = styled.button`
   position: absolute;
   right: 50px;
@@ -84,6 +85,44 @@ class ProductCard extends Component {
     const price = prices.find(
       (x) => x.currency.label === this.props.currency.label
     );
+    const generateUniqueId = (product) => {
+      let resList = [];
+      product.attributes.map((att) => {
+        debugger
+        att.items.map((item) => {
+          if (item.selected) {
+            resList.push(att.name);
+            resList.push(item.value);
+          }
+        });
+      });
+      const finRes = resList.toString();
+      return finRes
+    };
+
+    const onCartClick = ()=>{
+     let product  = this.props.products.products.find(p=>p.id === id)
+     let productCopy = {...product}
+     const attributeItems = product.attributes.map(a=>a.items)
+     const modifiedItems = attributeItems.map((item, i) => {
+      const firstItem = {...item[0]}
+      const modifiedItem = {selected: true, ...firstItem}
+      let itemCopy = {...item}
+      itemCopy[0] = modifiedItem
+      const res = itemCopy
+      return res
+     })
+     debugger
+     const attributes = productCopy.attributes.map((att, i) => {
+        const { items, ...rest } = att;
+        return { ...rest, items: modifiedItems[i] } });
+     productCopy.attributes = attributes;
+     const finalProduct = {
+      ...productCopy,
+      customId: generateUniqueId(productCopy)
+     }
+     this.props.cartProduct(finalProduct)
+    }
 
     return (
       this.props.currency && (
@@ -95,7 +134,7 @@ class ProductCard extends Component {
                 <OutOfStockP inStock={inStock}> OUT OF STOCK </OutOfStockP>
               </Link>
 
-              <CartButton onClick={() => this.props.cartProductById(id)}>
+              <CartButton onClick={() => onCartClick()}>
                 <CartIcon />
               </CartButton>
             </div>
@@ -120,6 +159,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = () => ({
   cartProductById,
+  cartProduct,
   uncartProduct,
 });
 
