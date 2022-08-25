@@ -5,9 +5,8 @@ class Api {
     try {
       const response = await apoloClient.query({
         query: query,
-        fetchPolicy: 'network-only'
+        fetchPolicy: 'no-cache'
       })
-
       if (!response || !response.data)
         throw new Error("Cannot get data!");
 

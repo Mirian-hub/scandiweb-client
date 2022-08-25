@@ -22,8 +22,8 @@ const CardsContent = styled.div`
   .categoryP {
     font-style: normal;
     font-weight: 400;
-    font-size: 42px;
-    line-height: 160%;
+    font-size: 32px;
+    line-height: 70%;
   }
 `;
 export class ProductsDesktop extends Component {

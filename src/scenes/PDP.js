@@ -40,7 +40,7 @@ const PriceContainer = styled.div`
   margin-top: 1rem;
   font-size: 18px;
   .title {
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
   }
 `;
 
@@ -48,15 +48,17 @@ const ItemInfo = styled.div`
   display: flex;
   flex-direction: column;
   .brandName {
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 600;
   }
   .productName {
-    font-size: 30px;
-    margin-bottom: 3rem;
+    font-size: 24px;
+    margin-bottom: 2rem;
   }
   .description {
     width: 100%;
+    max-height: 250px;
+    overflow:auto ;
   }
 `;
 const BoxItems = styled.div`
@@ -68,12 +70,13 @@ const BoxItems = styled.div`
 const AttributeItem = styled.div`
   display: flex;
   margin-right: 5px;
+  font-size: 14px;
   background: ${({ color, selected }) =>
     color ? color : selected ? "black" : ""};
   justify-content: center;
   align-items: center;
-  width: ${({ color }) => (color ? "2rem" : "4rem")};
-  height: ${({ color }) => (color ? "2rem" : "3rem")};
+  width: ${({ color }) => (color ? "2rem" : "3rem")};
+  height: ${({ color }) => (color ? "2rem" : "2.5rem")};
   border: ${({ color }) => (color ? "1px solid #BABFC4" : "1px solid #1d1f22")};
   outline: ${({ selected, color }) =>
     selected && color ? "3px solid #5ECE7B" : ""};
@@ -85,7 +88,7 @@ const AttributeContainer = styled.div`
   margin-bottom: 1rem;
   .attributeName {
     font-weight: 700;
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: 0.5rem;
   }
 `;
@@ -93,10 +96,10 @@ const AddToCartBtn = styled.button`
   background: #5ece7b;
   color: #ffffff;
   border: none;
-  width: 50%;
+  width: 60%;
   padding: 1rem 1.6rem;
   font-size: 19px;
-  margin: 2rem 0rem;
+  margin: 1rem 0rem;
   cursor: pointer;
   ${({ inStock }) =>
     !inStock &&
@@ -135,7 +138,7 @@ class PDP extends Component {
           }
         });
       });
-      const finRes = resList.toString();
+      const finRes = resList.toString()+product.id;
       return finRes;
     };
 

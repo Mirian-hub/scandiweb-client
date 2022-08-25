@@ -35,7 +35,7 @@ const Card = styled.div`
   width: 29%;
   margin-right: 40px;
   margin-bottom: 40px;
-  padding: 10px;
+  /* padding: 10px; */
   opacity: ${({ inStock }) => (!inStock ? "0.5" : "1")};
   &:hover ${CartButton} {
     display: ${(props) => (!props.inStock ? "none" : "block")};
@@ -48,7 +48,7 @@ const Card = styled.div`
     width: 100%;
     display: block;
     margin: auto;
-    height: 400px;
+    height: 300px;
     object-fit: cover;
     object-position: 50% 50%;
   }
@@ -95,7 +95,7 @@ class ProductCard extends Component {
           }
         });
       });
-      const finRes = resList.toString();
+      const finRes = resList.toString()+product.id;
       return finRes
     };
 

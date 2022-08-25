@@ -18,12 +18,12 @@ const OverlayContainer = styled.div`
 const OverlayTitle = styled.div`
   font-style: normal;
   font-weight: 700;
-  font-size: 32px;
-  padding: 3rem 0;
+  font-size: 28px;
+  padding: 2rem 0;
 `;
 const ItemPrice = styled.div`
   font-weight: 600;
-  font-size: 20px;
+  font-size: 18px;
   padding: 1rem 0 0.5rem 0;
 `;
 const MinusSquareIcon = styled(MinusSquare)`
@@ -36,8 +36,8 @@ const PlusSquareIcon = styled(PlusSquare)`
 
 const OverlayItem = styled.div`
   display: flex;
-  padding: 1rem 0rem;
-  margin: 0 0 3rem 0;
+  padding: 0.5rem 0rem;
+  margin: 0 0 1rem 0;
   > img {
     width: 20%;
   }
@@ -50,12 +50,12 @@ const ItemInfo = styled.div`
   .itemBrandStrong {
     font-style: normal;
     font-weight: 600;
-    font-size: 30px;
+    font-size: 26px;
   }
   .itemBrand {
     font-style: normal;
     font-weight: 400;
-    font-size: 30px;
+    font-size: 26px;
   }
 `;
 const ItemControls = styled.div`
