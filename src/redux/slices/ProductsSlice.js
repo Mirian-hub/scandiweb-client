@@ -5,6 +5,7 @@ import { getProducts } from "../../services/products";
 const initialState = {
   status: "idle",
   products: [],
+  product: null,
   cartProducts: [],
   cartOverlayOpen: false,
 };
@@ -41,7 +42,8 @@ export const ProductsSlice = createSlice({
     },
 
     cartProductByCustomId(state, action) {
-      state.cartProducts.find((p) => p.product.customId === action.payload).count++;
+      state.cartProducts.find((p) => p.product.customId === action.payload)
+        .count++;
     },
     cartProduct(state, action) {
       const productFromCart = state.cartProducts.find(
@@ -59,11 +61,11 @@ export const ProductsSlice = createSlice({
     },
     uncartProduct(state, action) {
       const product = state.cartProducts.find(
-        (p) =>
-          p.product.customId === action.payload 
+        (p) => p.product.customId === action.payload
       );
       if (product.count > 1) {
-        state.cartProducts.find((p) => p.product.customId === action.payload).count--;
+        state.cartProducts.find((p) => p.product.customId === action.payload)
+          .count--;
       } else {
         const index = state.cartProducts
           .map((p) => p.product.customId)
@@ -74,23 +76,18 @@ export const ProductsSlice = createSlice({
     toggleCartOverlay(state, action) {
       state.cartOverlayOpen = action.payload;
     },
+    setProduct(state, action) {
+      state.product = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getProductsAsync.pending, (state) => {
-        state.status = "loading";
-      })
       .addCase(getProductsAsync.fulfilled, (state, action) => {
-        state.status = "idle";
         state.products = action.payload;
       })
-      .addCase(getProductAsync.pending, (state) => {
-        state.status = "loading";
-      })
       .addCase(getProductAsync.fulfilled, (state, action) => {
-        state.status = "idle";
         state.product = action.payload;
-      });
+      })
   },
 });
 
@@ -101,5 +98,6 @@ export const {
   cartProductByCustomId,
   uncartProduct,
   toggleCartOverlay,
+  setProduct,
 } = ProductsSlice.actions;
 export default ProductsSlice.reducer;

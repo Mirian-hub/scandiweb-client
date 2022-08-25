@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { withRouter } from "../components/HOC/withRouter";
-import { getProductAsync } from "../redux/slices/ProductsSlice";
+import { getProductAsync, setProduct } from "../redux/slices/ProductsSlice";
 import { connect } from "react-redux";
 import { cartProduct } from "../redux/slices/ProductsSlice";
 import parse from "html-react-parser";
@@ -89,9 +89,6 @@ const AttributeContainer = styled.div`
     margin-bottom: 0.5rem;
   }
 `;
-const AttributeName = styled.div`
-  padding-bottom: 5px;
-`;
 const AddToCartBtn = styled.button`
   background: #5ece7b;
   color: #ffffff;
@@ -114,13 +111,11 @@ class PDP extends Component {
     this.state = {
       selectedImgSrc: null,
       productState: this.props.products.product,
-      attributeSelected: false
+      attributeSelected: false,
     };
-    props.getProductAsync(this.props.router.params.id);
+ props.getProductAsync(this.props.router.params.id);
   }
-
   componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
     if (this.props.products.product?.id !== prevProps.products.product?.id) {
       this.setState({
         productState: this.props.products.product,
@@ -175,15 +170,16 @@ class PDP extends Component {
           ...productCopy,
           customId: generateUniqueId(productCopy),
         },
-        attributeSelected: true
+        attributeSelected: true,
       });
     };
     const price = product?.prices?.find(
       (p) => this.props.currencies.currentCurrency.label === p.currency.label
     );
+
     return (
       product && (
-        <PDPContainer>
+        <PDPContainer >
           <div className="imgCollection">
             {product?.gallery.map((src, i) => (
               <img
@@ -242,14 +238,18 @@ class PDP extends Component {
               </PriceContainer>
               <AddToCartBtn
                 disabled={
-                  product.inStock === false || (!this.state.attributeSelected && this.state.productState.attributes.length > 0 )
+                  product.inStock === false ||
+                  (!this.state.attributeSelected &&
+                    this.state.productState.attributes.length > 0)
                 }
                 className="addToCartBtn"
-                inStock={
-                  product.inStock 
-                }
+                inStock={product.inStock}
                 onClick={() => {
-                  this.props.cartProduct(this.state.productState.attributes.length> 0 ? this.state.productState: {...this.state.productState, customId: ''});
+                  this.props.cartProduct(
+                    this.state.productState.attributes.length > 0
+                      ? this.state.productState
+                      : { ...this.state.productState, customId: "" }
+                  );
                 }}
               >
                 ADD TO CART

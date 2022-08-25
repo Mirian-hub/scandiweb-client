@@ -88,7 +88,6 @@ class ProductCard extends Component {
     const generateUniqueId = (product) => {
       let resList = [];
       product.attributes.map((att) => {
-        debugger
         att.items.map((item) => {
           if (item.selected) {
             resList.push(att.name);
@@ -112,7 +111,6 @@ class ProductCard extends Component {
       const res = itemCopy
       return res
      })
-     debugger
      const attributes = productCopy.attributes.map((att, i) => {
         const { items, ...rest } = att;
         return { ...rest, items: modifiedItems[i] } });
@@ -129,7 +127,7 @@ class ProductCard extends Component {
         <Card inStock={inStock}>
           <div className="container">
             <div className="imgContainer">
-              <Link to={`/product/${id}`}>
+              <Link to={`/product/${id}`} >
                 <CartImg src={gallery[0]} />
                 <OutOfStockP inStock={inStock}> OUT OF STOCK </OutOfStockP>
               </Link>
