@@ -94,10 +94,10 @@ export class AppBar extends Component {
         category &&
         res.payload.find((n) => n.name.toLowerCase() === category.toLowerCase())
       ) {
-        props.getProductsAsync(category);
+        // props.getProductsAsync(category);
         props.setCurrentCategory(category);
       } else {
-        props.getProductsAsync(res.payload[0].name);
+        // props.getProductsAsync(res.payload[0].name);
         props.setCurrentCategory(res.payload[0].name);
       }
     });

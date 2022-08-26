@@ -3,7 +3,7 @@ import { getProduct } from "../../services/product";
 import { getProducts } from "../../services/products";
 
 const initialState = {
-  status: "idle",
+  status: "pending",
   products: [],
   product: null,
   cartProducts: [],
@@ -85,7 +85,16 @@ export const ProductsSlice = createSlice({
       .addCase(getProductsAsync.fulfilled, (state, action) => {
         state.products = action.payload;
       })
+      .addCase(getProductAsync.pending, (state, action) => {
+        state.status = 'pending'
+        state.product = action.payload;
+      })
       .addCase(getProductAsync.fulfilled, (state, action) => {
+        state.status = 'fulfilled'
+        state.product = action.payload;
+      })
+      .addCase(getProductAsync.rejected, (state, action) => {
+        state.status = 'rejected'
         state.product = action.payload;
       })
   },

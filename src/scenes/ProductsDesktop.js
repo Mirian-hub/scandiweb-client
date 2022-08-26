@@ -30,7 +30,7 @@ export class ProductsDesktop extends Component {
   constructor(props) {
     super(props);
     this.state = { active: false, category: null };
-    getProductsAsync(this.props.router.location.pathname?.substring(1));
+    this.props.getProductsAsync(this.props.router.location.search.substring(6));
   }
   capitalizeFirstLetter = (str) =>
     str && str.charAt(0).toUpperCase() + str.slice(1);

@@ -213,7 +213,7 @@ export class CartOverlay extends Component {
           <Total>
             <strong>Total</strong>
             <strong>
-              <span>{this.props.currencies.currentCurrency.symbol} </span>{" "}
+              <span>{this.props.currencies.currentCurrency?.symbol} </span>{" "}
               {this.cartedProductsTotalPrice()?.toFixed(2)}
             </strong>
           </Total>

@@ -58,7 +58,7 @@ const ItemInfo = styled.div`
   .description {
     width: 100%;
     max-height: 250px;
-    overflow:auto ;
+    overflow: auto;
   }
 `;
 const BoxItems = styled.div`
@@ -108,6 +108,7 @@ const AddToCartBtn = styled.button`
   `}
 `;
 
+
 class PDP extends Component {
   constructor(props) {
     super(props);
@@ -116,7 +117,7 @@ class PDP extends Component {
       productState: this.props.products.product,
       attributeSelected: false,
     };
- props.getProductAsync(this.props.router.params.id);
+    props.getProductAsync(this.props.router.params.id);
   }
   componentDidUpdate(prevProps) {
     if (this.props.products.product?.id !== prevProps.products.product?.id) {
@@ -138,7 +139,7 @@ class PDP extends Component {
           }
         });
       });
-      const finRes = resList.toString()+product.id;
+      const finRes = resList.toString() + product.id;
       return finRes;
     };
 
@@ -179,10 +180,13 @@ class PDP extends Component {
     const price = product?.prices?.find(
       (p) => this.props.currencies.currentCurrency.label === p.currency.label
     );
+    console.log();
 
-    return (
+    return this.props.products.status === "pending" ? (
+      <> </>
+    ) : (
       product && (
-        <PDPContainer >
+        <PDPContainer>
           <div className="imgCollection">
             {product?.gallery.map((src, i) => (
               <img
@@ -205,8 +209,8 @@ class PDP extends Component {
           </div>
           <div className="description">
             <ItemInfo>
-              <div className="brandName">{product.brand} </div>
-              <div className="productName">{product.name} </div>
+              <div className="brandName">{product?.brand} </div>
+              <div className="productName">{product?.name} </div>
               {product.attributes.map((att, i) => {
                 return (
                   <AttributeContainer key={i}>
