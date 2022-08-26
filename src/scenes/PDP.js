@@ -108,7 +108,6 @@ const AddToCartBtn = styled.button`
   `}
 `;
 
-
 class PDP extends Component {
   constructor(props) {
     super(props);
@@ -180,7 +179,6 @@ class PDP extends Component {
     const price = product?.prices?.find(
       (p) => this.props.currencies.currentCurrency.label === p.currency.label
     );
-    console.log();
 
     return this.props.products.status === "pending" ? (
       <> </>
