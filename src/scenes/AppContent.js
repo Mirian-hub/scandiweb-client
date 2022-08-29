@@ -8,6 +8,7 @@ import styled from "styled-components";
 
 const Main = styled.main`
   position: relative;
+  min-height:70vh ;
 `;
 
 class AppContent extends Component {

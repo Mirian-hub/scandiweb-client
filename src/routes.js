@@ -1,5 +1,5 @@
 import React from 'react'
-import {Switch, Route, Routes as RoutesGroup } from 'react-router-dom'
+import {Route, Routes as RoutesGroup } from 'react-router-dom'
 import Cart from './scenes/Cart'
 import PDP from './scenes/PDP'
 import ProductDesktop from './scenes/ProductsDesktop'

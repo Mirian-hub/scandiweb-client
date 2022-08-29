@@ -5,7 +5,6 @@ import ProductCard from "../components/ProductCard";
 import { connect } from "react-redux";
 import {
   getProductsAsync,
-  toggleCartOverlay,
 } from "../redux/slices/ProductsSlice";
 import { withRouter } from "../components/HOC/withRouter";
 
@@ -70,7 +69,6 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = () => ({
   getProductsAsync,
-  toggleCartOverlay,
 });
 
 export default connect(

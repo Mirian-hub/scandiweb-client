@@ -9,7 +9,6 @@ import {
   toggleCartOverlay,
 } from "../redux/slices/ProductsSlice";
 import {
-  selectState,
   getCategoriesAsync,
   setCurrentCategory,
 } from "../redux/slices/CategorySlice";
@@ -87,17 +86,15 @@ export class AppBar extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = { activeId: 0, active: false, selectOpen: true };
+    this.state = { activeId: 0, active: false };
     props.getCategoriesAsync().then((res) => {
       const category = this.checkCategoryInUri(this.props.router.location);
       if (
         category &&
         res.payload.find((n) => n.name.toLowerCase() === category.toLowerCase())
       ) {
-        // props.getProductsAsync(category);
         props.setCurrentCategory(category);
       } else {
-        // props.getProductsAsync(res.payload[0].name);
         props.setCurrentCategory(res.payload[0].name);
       }
     });

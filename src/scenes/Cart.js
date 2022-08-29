@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { ReactComponent as MinusSquare } from "../assets/icons/minusSquare.svg";
 import { ReactComponent as PlusSquare } from "../assets/icons/plusSquare.svg";
-import ImageSlicer from "../components/ImageSlicer";
+import ImageSlider from "../components/ImageSlider";
 import {
   cartProductByCustomId,
   uncartProduct,
@@ -143,7 +143,6 @@ export class Cart extends Component {
     return products.map((p) => p.count).reduce((a, b) => a + b, 0);
   };
   render() {
-    // const productList = this.countSameProducts();
     const { cartProductByCustomId, uncartProduct, products } = this.props;
     return (
       <OverlayContainer>
@@ -209,9 +208,8 @@ export class Cart extends Component {
                 </div>
               </ItemControls>
               <div style={{ width: "20%" }}>
-                <ImageSlicer sources={product.gallery} />
+                <ImageSlider source={product.gallery} />
               </div>
-              {/* <img src={product.gallery[0]}></img> */}
             </OverlayItem>
           );
         })}
@@ -248,7 +246,6 @@ export class Cart extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  categories: state.categories.categories,
   products: state.products,
   currencies: state.currencies,
 });

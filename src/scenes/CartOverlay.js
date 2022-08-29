@@ -205,7 +205,7 @@ export class CartOverlay extends Component {
                   />
                 </div>
               </ItemControls>
-              <img src={product.gallery[0]}></img>
+              <img src={product.gallery[0]} alt="" ></img>
             </OverlayItem>
           );
         })}

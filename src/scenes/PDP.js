@@ -1,15 +1,18 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { withRouter } from "../components/HOC/withRouter";
-import { getProductAsync, setProduct } from "../redux/slices/ProductsSlice";
+import { getProductAsync } from "../redux/slices/ProductsSlice";
 import { connect } from "react-redux";
 import { cartProduct } from "../redux/slices/ProductsSlice";
 import parse from "html-react-parser";
+import CustomLabel from "../components/CustomLabel";
 
 const PDPContainer = styled.div`
   width: 90%;
   margin: auto;
   display: flex;
+  margin-bottom:2rem ;
+
   .imgCollection {
     width: 10%;
     max-height: 90vh;
@@ -24,12 +27,8 @@ const PDPContainer = styled.div`
   }
   .mainImgContainer {
     width: 60%;
-    max-height: 90vh;
-    overflow: auto;
     margin: 0px 3rem 0px 1rem;
-  }
-  .mainImg {
-    width: 100%;
+    position: relative;
   }
   .description {
     width: 30%;
@@ -57,14 +56,17 @@ const ItemInfo = styled.div`
   }
   .description {
     width: 100%;
-    max-height: 250px;
-    overflow: auto;
   }
 `;
 const BoxItems = styled.div`
   display: flex;
   flex-wrap: wrap;
   cursor: pointer;
+`;
+
+const MainImg = styled.img`
+  max-width: 100%;
+  opacity: ${({ inStock }) => (!inStock ? "0.5" : "1")};
 `;
 
 const AttributeItem = styled.div`
@@ -127,7 +129,6 @@ class PDP extends Component {
   }
   render() {
     const product = this.state.productState;
-
     const generateUniqueId = (product) => {
       let resList = [];
       product.attributes.map((att) => {
@@ -196,14 +197,24 @@ class PDP extends Component {
                     selectedImgSrc: src,
                   })
                 }
+                alt=""
               ></img>
             ))}
           </div>
           <div className="mainImgContainer">
-            <img
-              className="mainImg"
+            <MainImg
+              inStock={product.inStock}
               src={this.state.selectedImgSrc ?? product?.gallery[0]}
-            ></img>
+              alt=""
+            ></MainImg>
+            <CustomLabel
+              show={product.inStock}
+              text={"OUT OF STOCK"}
+              top={200}
+              font={60}
+              background={'white'}
+              opacity={0.5}
+            />
           </div>
           <div className="description">
             <ItemInfo>
@@ -269,7 +280,6 @@ class PDP extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  categories: state.categories.categories,
   products: state.products,
   currencies: state.currencies,
 });

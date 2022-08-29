@@ -71,30 +71,33 @@ export default class ImageSlicer extends Component {
     this.state = { index: 0 };
   }
   render() {
+    const { source } = this.props;
     return (
       <SliderContainer>
-        <Image src={this.props.sources[this.state.index]} />
-        <ButtonGroups>
-          <LeftButton
-            active={this.state.index > 0}
-            onClick={() => {
-              this.state.index > 0 &&
-                this.setState((state) => ({ index: state.index - 1 }));
-            }}
-          >
-            <LeftArrowSvg />
-          </LeftButton>
+        <Image src={source[this.state.index]} alt=""/>
+        {source?.length > 1 && (
+          <ButtonGroups>
+            <LeftButton
+              active={this.state.index > 0}
+              onClick={() => {
+                this.state.index > 0 &&
+                  this.setState((state) => ({ index: state.index - 1 }));
+              }}
+            >
+              <LeftArrowSvg />
+            </LeftButton>
 
-          <RightButton
-            active={this.state.index + 1 < this.props.sources.length}
-            onClick={() => {
-              this.state.index + 1 < this.props.sources.length &&
-                this.setState((state) => ({ index: state.index + 1 }));
-            }}
-          >
-            <RightArrowSvg />
-          </RightButton>
-        </ButtonGroups>
+            <RightButton
+              active={this.state.index + 1 < source.length}
+              onClick={() => {
+                this.state.index + 1 < source.length &&
+                  this.setState((state) => ({ index: state.index + 1 }));
+              }}
+            >
+              <RightArrowSvg />
+            </RightButton>
+          </ButtonGroups>
+        )}
       </SliderContainer>
     );
   }
